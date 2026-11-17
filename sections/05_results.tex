@@ -8,7 +8,7 @@ The topology simulates an industrial network environment designed in GNS3 to eva
     \centering
     \includegraphics[width=0.5\textwidth]{scenario1_tcp_syn_flood.png}
     \caption{TCP SYN Flood to PLC (Port 502)}
-    \label{fig:TCP SYN Flood to PLC (Port 502)}
+    \label{fig:scenario1-overview}
 \end{figure}
 
 \textbf{Network Structure}\\
@@ -41,42 +41,42 @@ This setup enables quantitative analysis of key performance metrics such as pack
     \centering
     \includegraphics[width=0.47\textwidth]{tcp_syn_attack.png}
     \caption{TCP SYN Flood to PLC (Port 502)}
-    \label{fig:TCP SYN Flood to PLC (Port 502)}
+    \label{fig:tcp-syn-attack}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{latency_packet_loss_without_ips.png}
     \caption{Latency and packet loss without IPS}
-    \label{fig:Latency and packet loss without IPS}
+    \label{fig:latency-loss-without-ips}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{plc_cpu_usage_without_ips.png}
     \caption{TCP SYN Flood to PLC PCL CPU Usage WITHOUT IPS}
-    \label{fig:TCP SYN Flood to PLC PCL CPU Usage WITHOUT IPS}
+    \label{fig:plc-cpu-without-ips}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{suricata_detection.png}
     \caption{Attack detection by Suricata (IPS)}
-    \label{fig:Attack detection by Suricata (IPS)}
+    \label{fig:suricata-detection}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{latency_packet_loss_with_ips.png}
     \caption{Latency and packet loss with IPS}
-    \label{fig:Latency and packet loss with IPS}
+    \label{fig:latency-loss-with-ips}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{ips_blocking_rule.png}
     \caption{Latency and packet loss with IPS}
-    \label{fig:Latency and packet loss with IPS}
+    \label{fig:ips-blocking-rule}
 \end{figure}
 
 \begin{table}[htbp]
@@ -100,7 +100,7 @@ Throughput (Mbps) & 18 & 92 & 411\% \\
     \centering
     \includegraphics[width=0.47\textwidth]{latency_comparison.png}
     \caption{Network Latency Comparison}
-    \label{fig:Network Latency Comparison}
+    \label{fig:latency-comparison}
 \end{figure}
 
 The results demonstrate that the SYN Flood attack severely affected PLC communications when no protection mechanism was present. After enabling Suricata in inline mode, malicious TCP connection attempts were identified and blocked before reaching the PLC. Packet loss decreased from 42.8\% to 4.7\%, while PLC availability increased to 98.3\%.\\
@@ -116,14 +116,14 @@ To generate this malicious traffic in the experimental environment, the followin
     \centering
     \includegraphics[width=0.47\textwidth]{scapy_generation.png}
     \caption{Using Scapy for packet generation}
-    \label{fig:Using Scapy for packet generation}
+    \label{fig:scapy-generation}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.47\textwidth]{modbus_testing.png}
     \caption{Using Modbus testing utilities}
-    \label{fig:Using Modbus testing utilities}
+    \label{fig:modbus-testing}
 \end{figure}
 
 \begin{table}[htbp]
@@ -147,7 +147,7 @@ Throughput (Mbps) & 22 & 95 & 331.8\% \\
     \centering
     \includegraphics[width=0.47\textwidth]{packet_loss_comparison.png}
     \caption{Packet Loss Comparison}
-    \label{Packet Loss Comparison}
+    \label{fig:packet-loss-comparison}
 \end{figure}
 
 The Modbus/TCP Flood attack produced a considerable increase in PLC processing load and communication delay. The IPS successfully detected abnormal traffic patterns targeting TCP port 502 and blocked malicious requests. The detection rate reached 99.3\%, demonstrating the effectiveness of Deep Packet Inspection (DPI) for industrial protocols.\\
@@ -164,7 +164,7 @@ To generate this malicious traffic in the experimental environment, the followin
     \centering
     \includegraphics[width=0.47\textwidth]{icmp_ping_flood.png}
     \caption{Using the ping flood command}
-    \label{fig:Using the ping flood command}
+    \label{fig:icmp-ping-flood}
 \end{figure}
 
 \begin{table}[htbp]
@@ -188,7 +188,7 @@ Throughput (Mbps) & 30 & 98 & 226.7\% \\
     \centering
     \includegraphics[width=0.47\textwidth]{plc_availability_comparison.png}
     \caption{PLC Availability Comparison}
-    \label{fig:PLC Availability Comparison}
+    \label{fig:plc-availability-comparison}
 \end{figure}
 
 The ICMP Flood attack affected overall network performance by consuming bandwidth resources. However, the IPS successfully filtered excessive ICMP traffic and maintained communication stability. The average latency was reduced from 265 ms to 35 ms, while PLC availability remained above 99%.
@@ -199,7 +199,7 @@ The ICMP Flood attack affected overall network performance by consuming bandwidt
     \centering
     \includegraphics[width=0.47\textwidth]{throughput_comparison.png}
     \caption{Throughput Comparison}
-    \label{fig:Throughput Comparison}
+    \label{fig:throughput-comparison}
 \end{figure}
 
 Figure 15 shows that the deployment of the IPS significantly increased the amount of legitimate traffic successfully processed during all attack scenarios. The largest improvement was observed during the TCP SYN Flood attack, where throughput increased from 18 Mbps to 92 Mbps.
@@ -208,7 +208,7 @@ Figure 15 shows that the deployment of the IPS significantly increased the amoun
     \centering
     \includegraphics[width=0.47\textwidth]{cpu_utilization_comparison.png}
     \caption{CPU Utilization Comparison}
-    \label{fig:CPU Utilization Comparison}
+    \label{fig:cpu-utilization-comparison}
 \end{figure}
 
 Figure 16 demonstrates that, despite the additional processing required by the IPS, the overall CPU utilization of the protected industrial environment remained substantially lower than under attack conditions without protection.
@@ -217,7 +217,7 @@ Figure 16 demonstrates that, despite the additional processing required by the I
     \centering
     \includegraphics[width=0.47\textwidth]{performance_curve.png}
     \caption{Conceptual Performance Evolution During Attack Mitigation}
-    \label{fig:Conceptual Performance Evolution During Attack Mitigation}
+    \label{fig:performance-curve}
 \end{figure}
 
 Figure 17 summarizes the overall behavior of the proposed architecture throughout the experimental stages. Although the figure represents normalized experimental averages rather than continuous time-series measurements, it clearly illustrates the reduction in network latency after IPS activation and the subsequent stabilization of industrial communications.
