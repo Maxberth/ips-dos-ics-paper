@@ -6,7 +6,7 @@ The topology simulates an industrial network environment designed in GNS3 to eva
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Imagenes/ESCENARIO_!.png}
+    \includegraphics[width=0.5\textwidth]{scenario1_tcp_syn_flood.png}
     \caption{TCP SYN Flood to PLC (Port 502)}
     \label{fig:TCP SYN Flood to PLC (Port 502)}
 \end{figure}
@@ -39,42 +39,42 @@ This setup enables quantitative analysis of key performance metrics such as pack
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/ataque_tcp.png}
+    \includegraphics[width=0.47\textwidth]{tcp_syn_attack.png}
     \caption{TCP SYN Flood to PLC (Port 502)}
     \label{fig:TCP SYN Flood to PLC (Port 502)}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/latencia y perdidas de paquetes.png}
+    \includegraphics[width=0.47\textwidth]{latency_packet_loss_without_ips.png}
     \caption{Latency and packet loss without IPS}
     \label{fig:Latency and packet loss without IPS}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/uso del cpu del pcl.png}
+    \includegraphics[width=0.47\textwidth]{plc_cpu_usage_without_ips.png}
     \caption{TCP SYN Flood to PLC PCL CPU Usage WITHOUT IPS}
     \label{fig:TCP SYN Flood to PLC PCL CPU Usage WITHOUT IPS}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/detección por suricata.png}
+    \includegraphics[width=0.47\textwidth]{suricata_detection.png}
     \caption{Attack detection by Suricata (IPS)}
     \label{fig:Attack detection by Suricata (IPS)}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/latencia y perdidas de paquete con ips.png}
+    \includegraphics[width=0.47\textwidth]{latency_packet_loss_with_ips.png}
     \caption{Latency and packet loss with IPS}
     \label{fig:Latency and packet loss with IPS}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/regla de bloqueo.png}
+    \includegraphics[width=0.47\textwidth]{ips_blocking_rule.png}
     \caption{Latency and packet loss with IPS}
     \label{fig:Latency and packet loss with IPS}
 \end{figure}
@@ -98,7 +98,7 @@ Throughput (Mbps) & 18 & 92 & 411\% \\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/latencia_comparison.png}
+    \includegraphics[width=0.47\textwidth]{latency_comparison.png}
     \caption{Network Latency Comparison}
     \label{fig:Network Latency Comparison}
 \end{figure}
@@ -114,14 +114,14 @@ To generate this malicious traffic in the experimental environment, the followin
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/scapygeneration.png}
+    \includegraphics[width=0.47\textwidth]{scapy_generation.png}
     \caption{Using Scapy for packet generation}
     \label{fig:Using Scapy for packet generation}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/mobdus.png}
+    \includegraphics[width=0.47\textwidth]{modbus_testing.png}
     \caption{Using Modbus testing utilities}
     \label{fig:Using Modbus testing utilities}
 \end{figure}
@@ -145,7 +145,7 @@ Throughput (Mbps) & 22 & 95 & 331.8\% \\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/PacketLoss.png}
+    \includegraphics[width=0.47\textwidth]{packet_loss_comparison.png}
     \caption{Packet Loss Comparison}
     \label{Packet Loss Comparison}
 \end{figure}
@@ -162,7 +162,7 @@ To generate this malicious traffic in the experimental environment, the followin
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/flood.png}
+    \includegraphics[width=0.47\textwidth]{icmp_ping_flood.png}
     \caption{Using the ping flood command}
     \label{fig:Using the ping flood command}
 \end{figure}
@@ -186,7 +186,7 @@ Throughput (Mbps) & 30 & 98 & 226.7\% \\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/Availability.png}
+    \includegraphics[width=0.47\textwidth]{plc_availability_comparison.png}
     \caption{PLC Availability Comparison}
     \label{fig:PLC Availability Comparison}
 \end{figure}
@@ -197,7 +197,7 @@ The ICMP Flood attack affected overall network performance by consuming bandwidt
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/Throughput.png}
+    \includegraphics[width=0.47\textwidth]{throughput_comparison.png}
     \caption{Throughput Comparison}
     \label{fig:Throughput Comparison}
 \end{figure}
@@ -206,7 +206,7 @@ Figure 15 shows that the deployment of the IPS significantly increased the amoun
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/CPU.png}
+    \includegraphics[width=0.47\textwidth]{cpu_utilization_comparison.png}
     \caption{CPU Utilization Comparison}
     \label{fig:CPU Utilization Comparison}
 \end{figure}
@@ -215,7 +215,7 @@ Figure 16 demonstrates that, despite the additional processing required by the I
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.47\textwidth]{Imagenes/PerformanceCurve.png}
+    \includegraphics[width=0.47\textwidth]{performance_curve.png}
     \caption{Conceptual Performance Evolution During Attack Mitigation}
     \label{fig:Conceptual Performance Evolution During Attack Mitigation}
 \end{figure}
