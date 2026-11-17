@@ -1,0 +1,29 @@
+# Artefactos de compilación LaTeX
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.run.xml
+*.bcf
+*.nav
+*.snm
+*.vrb
+build.log
+build/
+
+# PDF generado (solo se versiona el snapshot enviado en actual/)
+/main.pdf
+
+# Editor / sistema
+*~
+*.swp
+.DS_Store
+.vscode/
+.idea/
