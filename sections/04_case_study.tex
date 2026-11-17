@@ -160,7 +160,7 @@ According to Fraunholz et al. \cite{fraunholz2018industrial}, PLCs are particula
 
 The experimental environment considers multiple attack scenarios targeting industrial communication services such as Modbus/TCP.
 
-\subsubsection{Scenery 1 -- TCP SYN Flood}
+\subsubsection{Scenario 1 -- TCP SYN Flood}
 
 The first attack scenario consists of a TCP SYN Flood directed toward the PLC Modbus/TCP service operating on port 502.
 
@@ -174,7 +174,7 @@ hping3 -S --flood -V -p 502 192.168.1.10
 
 According to Ahmed et al. \cite{ahmed2019survey}, SYN Flood attacks can significantly degrade the availability of industrial services and interrupt SCADA communications.
 
-\subsubsection{Scenery 2 -- Modbus/TCP Flood}
+\subsubsection{Scenario 2 -- Modbus/TCP Flood}
 
 This scenario focuses on flooding the PLC with excessive Modbus/TCP requests.
 
@@ -195,7 +195,7 @@ The attack traffic may be generated using tools such as:
     \item custom packet generators.
 \end{itemize}
 
-\subsubsection{Scenery 3 -- ICMP Flood}
+\subsubsection{Scenario 3 -- ICMP Flood}
 
 The third attack scenario consists of an ICMP Flood attack targeting the industrial network.
 

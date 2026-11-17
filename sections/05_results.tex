@@ -1,7 +1,7 @@
 \section{Results and Discussion}\label{sec:results}
 The effectiveness of the proposed Intrusion Prevention System (IPS) architecture was evaluated under three Denial-of-Service (DoS) attack scenarios targeting industrial communication services. The experiments compared the behavior of the industrial network before and after IPS deployment using the metrics defined in Section 3.4.
 
-\subsection{Escenario 1 – TCP SYN Flood}
+\subsection{Scenario 1 -- TCP SYN Flood}
 The topology simulates an industrial network environment designed in GNS3 to evaluate the impact of a TCP SYN Flood attack on the Modbus/TCP service of a PLC operating on port 502. The main objective is to analyze the degradation of communication performance and the effectiveness of an Intrusion Prevention System (IPS) in mitigating this type of attack.
 
 \begin{figure}[H]
@@ -107,9 +107,10 @@ The results demonstrate that the SYN Flood attack severely affected PLC communic
 
 Figure~\ref{fig:latency-comparison} shows that the IPS considerably reduced the average communication delay in all evaluated attack scenarios. Under the TCP SYN Flood attack, latency decreased from 325 ms to only 48 ms, demonstrating that the inline IPS effectively prevented resource exhaustion before malicious traffic reached the PLC.
 
-\subsection{Scenario 2 – Modbus/TCP Flood}
+\subsection{Scenario 2 -- Modbus/TCP Flood}
 The Modbus/TCP Flood attack generates excessive industrial requests directed toward the PLC communication service. This scenario specifically evaluates the protocol-aware inspection capabilities of the IPS.
-Attack Behavior The attack simulates malicious traffic targeting industrial communication protocols in order to overload the PLC processing capabilities. The attacker machine, running Kali Linux, floods the PLC with unauthorized Modbus/TCP requests, which severely impacts PLC response time and SCADA communication stability.
+\textbf{Attack Behavior}\\
+The attack simulates malicious traffic targeting industrial communication protocols in order to overload the PLC processing capabilities. The attacker machine, running Kali Linux, floods the PLC with unauthorized Modbus/TCP requests, which severely impacts PLC response time and SCADA communication stability.
 To generate this malicious traffic in the experimental environment, the following command-line tools can be utilized:
 
 \begin{figure}[H]
@@ -154,9 +155,10 @@ The Modbus/TCP Flood attack produced a considerable increase in PLC processing l
 
 Figure~\ref{fig:packet-loss-comparison} illustrates the significant reduction in packet loss after IPS deployment. During the Modbus/TCP Flood attack, packet loss decreased from 38.4\% to only 3.5\%, confirming the effectiveness of Deep Packet Inspection (DPI) in filtering malicious industrial traffic.
 
-\subsection{Scenario 3 – ICMP Flood}
+\subsection{Scenario 3 -- ICMP Flood}
 The ICMP Flood attack focuses on saturating the industrial network bandwidth and increasing communication latency between SCADA systems and PLC devices. This scenario evaluates the IPS capability to preserve network stability and resource availability under a volumetric attack.
-Attack Behavior By generating a massive volume of ICMP Echo Request packets, the attacker aims to exhaust network throughput and introduce significant delays, which can disrupt the deterministic nature of industrial communications.\\
+\textbf{Attack Behavior}\\
+By generating a massive volume of ICMP Echo Request packets, the attacker aims to exhaust network throughput and introduce significant delays, which can disrupt the deterministic nature of industrial communications.\\
 
 To generate this malicious traffic in the experimental environment, the following command can be utilized from the attacker machine:
 
