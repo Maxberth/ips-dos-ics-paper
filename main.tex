@@ -1,0 +1,51 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{url}
+
+\graphicspath{{actual/}}
+
+\begin{document}
+
+\title{Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection}
+\titlerunning{IPS for DoS Mitigation in ICS}
+
+\author{Manuel Oswaldo Juarez Mayo \and
+Jose Alfredo Valdez Reyes \and
+Alberth Jesus Vigo Saldaña \and
+Javier Eduardo Villegas Vidal \and
+Jesús Moises Martin Villar Castillo}
+\authorrunning{M. O. Juarez Mayo et al.}
+
+\institute{Universidad Nacional de Trujillo, Trujillo, Peru\\
+\email{\{t1022701121,t1052702321,t1022700221,t1512700721,t052700420\}@unitru.edu.pe}}
+
+\maketitle
+
+\begin{abstract}
+Industrial Control Systems (ICS) are increasingly exposed to cyberattacks due to the integration of operational technology (OT) with IP-based networks.
+Among these threats, Denial-of-Service (DoS) attacks critically affect process availability by targeting Programmable Logic Controllers (PLCs) and industrial switches.
+This study presents the design and implementation of an Intrusion Prevention System (IPS) architecture to mitigate DoS attacks in industrial control networks.
+The experimental setup used a virtual environment with OpenPLC controllers, SCADA components, and IPS tools (Suricata) to evaluate performance under SYN, ICMP, UDP, and Modbus TCP flooding.
+Results show that IPS deployment effectively reduced latency, packet loss, and service interruptions while maintaining PLC availability and stable communication.
+The proposed architecture strengthened the resilience of the industrial network against DoS threats.
+
+\keywords{Industrial Control Systems \and Intrusion Prevention System \and DoS Mitigation \and PLC Protection \and SCADA Networks \and Cybersecurity}
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_background}
+\input{sections/03_method}
+\input{sections/04_case_study}
+\input{sections/05_results}
+\input{sections/06_conclusions}
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,7 @@
+\section{Conclusions and Future Research}\label{sec:conclusions}
+
+The proposed IPS architecture effectively mitigated the impact of TCP SYN, Modbus/TCP, and ICMP flood attacks on the simulated industrial network. Experimental results showed significant reductions in packet loss and network latency, as well as improvements in PLC availability and communication performance; this demonstrates that integrating in-line Deep Packet Inspection (DPI) with network segmentation offers an effective and cost-efficient approach to protecting industrial control systems against DoS attacks.
+
+Despite these encouraging results, certain limitations must be considered. The experimental evaluation was conducted in a virtualized environment, which cannot fully replicate the deterministic behavior or operational constraints of real-world industrial infrastructures. Furthermore, Suricata's effectiveness relies on signature-based detection rules, limiting its ability to identify unknown or zero-day attacks without prior rule updates.
+
+Future work should focus on validating the proposed architecture in real industrial environments using commercial PLCs and industrial network equipment. Additionally, integrating hybrid detection models based on machine learning and behavioral analysis—along with evaluating additional industrial communication protocols and more sophisticated cyberattack scenarios—would enhance the applicability and robustness of the proposed solution for real-world industrial control systems.

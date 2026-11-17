@@ -1,0 +1,198 @@
+\section{Research Method}\label{sec:method}
+This research adopted an applied and experimental methodology aimed at evaluating the effectiveness of an Intrusion Prevention System (IPS) for mitigating Denial-of-Service (DoS) attacks in industrial control networks. The methodological framework was designed to simulate realistic industrial communication scenarios involving Programmable Logic Controllers (PLCs), industrial switches, SCADA components, and malicious traffic generation within a controlled virtual environment.
+
+The experimental process consisted of designing an industrial network architecture, implementing an IPS-based protection mechanism, generating multiple DoS attack scenarios, capturing network traffic, and analyzing performance indicators related to availability, packet loss, latency, and attack mitigation efficiency. The methodology allowed comparative analysis between industrial environments operating with and without IPS protection under identical attack conditions.
+
+Recent industrial cybersecurity studies emphasize the importance of experimental validation in ICS security research due to the operational complexity and real-time communication requirements of industrial infrastructures. Additionally, experimental approaches facilitate the evaluation of industrial cybersecurity mechanisms under controlled attack scenarios while preserving reproducibility and performance analysis capabilities.
+
+\subsection{Research Approach}
+The research followed an applied, quantitative, and experimental approach focused on evaluating cybersecurity mechanisms in industrial communication environments. The applied research methodology was selected because the study aims to solve a practical industrial cybersecurity problem associated with the protection of PLC-based communication infrastructures against denial-of-service attacks.
+
+\begin{table}[htbp]
+\caption{Operationalization of Research Variables} 
+\scriptsize 
+\begin{tabular}{l c c c} 
+\toprule
+\textbf{Indicator} & \textbf{Index} & \textbf{\begin{tabular}{@{}c@{}}Unit of\\Measurement\end{tabular}} & \textbf{Unit of Observation} \\
+\midrule
+Packet Loss & [0--100] & \% & Network Traffic \\
+Network Latency & [0--1000] & ms & PLC/SCADA Comm. \\
+PLC Availability & [0--100] & \% & Industrial Services \\
+Detection Rate & [0--100] & \% & IPS Detection \\
+CPU Utilization & [0--100] & \% & IPS Devices \\
+Throughput & [0--1000] & Mbps & Network Performance \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A quantitative approach was adopted to measure the operational impact of cyberattacks and evaluate the effectiveness of the proposed IPS architecture using measurable network performance indicators such as packet loss, response latency, attack detection rate, throughput, and device availability. Quantitative methodologies are widely employed in industrial cybersecurity research due to their ability to provide objective performance evaluation and statistical analysis of network behavior under attack conditions.
+
+The experimental component of the research consisted of implementing a virtual industrial network environment where multiple attack scenarios were executed under controlled conditions. The study employed comparative analysis between a control environment without IPS protection and an experimental environment incorporating IPS-based traffic filtering and attack mitigation mechanisms. This experimental methodology enabled direct evaluation of the operational improvements introduced by the IPS deployment.
+
+\subsection{Experimental Design}
+The experimental design will follow a quasi-experimental approach based on comparative evaluation between two industrial network scenarios:
+
+\begin{enumerate}
+    \item Control Group (CG): Industrial network operating without IPS protection.
+    \item Experimental Group (EG): Industrial network operating with IPS protection enabled.
+\end{enumerate}
+
+Both environments maintained identical industrial communication architectures, including PLC devices, industrial switches, SCADA components, and industrial communication protocols. The primary difference between the two scenarios was the implementation of inline IPS protection in the experimental environment.
+
+The experimental infrastructure will simulate an industrial communication network composed of:
+
+\begin{itemize}
+    \item OpenPLC controllers
+    \item SCADA communication services
+    \item industrial Ethernet switching
+    \item segmented industrial traffic
+    \item and attack-generation nodes.
+\end{itemize}
+
+Different denial-of-service attack scenarios will be executed from an attacker node using Kali Linux tools to generate malicious traffic targeting industrial communication devices and PLC infrastructure. The attacks included:
+
+\begin{itemize}
+    \item SYN Flood attacks
+    \item ICMP Flood attacks
+    \item UDP Flood attacks
+    \item and Modbus TCP flooding attacks.
+\end{itemize}
+
+\begin{table}[htbp]
+\caption{Experimental Attack Scenarios}
+\label{tab:attacks}
+\centering
+\scriptsize
+\begin{tabular}{l c c c}
+\toprule
+\textbf{Attack Type} & \textbf{Duration} & \textbf{Protocol} &
+\textbf{Target} \\
+\midrule
+SYN Flood & 5 min & TCP & PLC Services \\
+ICMP Flood & 5 min & ICMP & Network Nodes \\
+UDP Flood & 5 min & UDP & SCADA Services \\
+Modbus Flood & 5 min & Modbus/TCP & PLC Devices \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The experimental process consisted of the following phases:
+
+Baseline traffic generation under normal industrial communication conditions.
+Execution of denial-of-service attacks without IPS protection.
+Activation and configuration of IPS security policies.
+Re-execution of attack scenarios with IPS protection enabled.
+Traffic capture and performance analysis using monitoring tools.
+Comparative evaluation of operational metrics.
+
+This methodology enabled analysis of the operational behavior of industrial communication infrastructures before and after IPS deployment while maintaining controlled and reproducible testing conditions.
+
+\subsection{Variables}
+The research considered one independent variable and multiple dependent variables associated with industrial network performance and cybersecurity effectiveness.
+
+\subsubsection{Independent Variable}
+\textbf{IPS Implementation}
+
+The independent variable corresponds to the deployment and activation of the Intrusion Prevention System (IPS) within the industrial communications infrastructure. The IPS will be configured to perform online packet inspection, malicious traffic filtering, industrial protocol inspection, and attack mitigation during denial-of-service attack scenarios.
+
+\subsubsection{Dependent Variables}
+\textbf{Packet Loss}
+Packet loss represents the percentage of industrial communication packets that failed to reach their destination during network transmission. High packet loss may affect industrial process synchronization and operational continuity.
+
+\textbf{Network Latency}
+Network latency refers to the communication delay between industrial devices such as PLCs, SCADA servers, and industrial switches. Increased latency may negatively affect deterministic industrial communications and real-time operations.
+
+\textbf{PLC Availability}
+PLC availability measures the operational continuity of industrial controllers during attack conditions. Availability represents the percentage of operational uptime maintained during experimental execution.
+
+\textbf{Attack Detection Rate}
+The detection rate evaluates the effectiveness of the IPS in identifying and mitigating malicious traffic generated during denial-of-service attacks.
+
+\textbf{CPU Utilization}
+CPU utilization measures the computational load experienced by industrial devices and IPS components during traffic flooding scenarios.
+
+\textbf{Throughput}
+Throughput represents the amount of industrial communication traffic successfully processed by the network infrastructure during normal and attack conditions.
+
+Recent studies indicate that these variables are widely employed for evaluating industrial cybersecurity mechanisms and traffic protection architectures in ICS environments.
+
+\subsection{Metrics}
+To evaluate the effectiveness of the proposed IPS architecture, several quantitative metrics will be used during the experimental process.
+
+\subsubsection{Packet Loss Rate}
+The packet loss rate measures the percentage of packets lost during communication transmission.
+
+\begin{equation*}
+\text{Packet Loss} = \frac{Packets_{\text{sent}} - Packets_{\text{received}}}{Packets_{\text{sent}}} \times 100
+\end{equation*}
+
+\text{Where:}
+\begin{itemize}
+    \item $Packets_{\text{sent}}$ represents the total transmitted packets.
+    \item $Packets_{\text{received}}$ represents the successfully received packets.
+\end{itemize}
+
+\subsubsection{Detection Rate}
+The detection rate evaluates the capability of the IPS to identify malicious traffic generated during attack scenarios.
+
+\[
+\text{Detection Rate} = \frac{\text{Detected Attacks}}{\text{Total Attacks}} \times 100
+\]
+
+Where:
+\begin{itemize}
+    \item $\text{Detected Attacks}$ represents the number of successfully identified attacks.
+    \item $\text{Total Attacks}$ represents the total executed attacks.
+\end{itemize}
+
+\subsubsection{Availability}
+Availability measures the operational continuity of industrial devices during attack conditions.
+
+\[
+\text{Availability} = \frac{\text{Uptime}}{\text{Total Time}} \times 100
+\]
+
+Where:
+\begin{itemize}
+    \item $\text{Uptime}$ represents the total operational time.
+    \item $\text{Total Time}$ represents the total experimental duration.
+\end{itemize}
+
+\subsubsection{Network Latency}
+Network latency was measured using packet round-trip time (RTT) analysis between industrial devices and PLC communication nodes.
+
+\[
+\text{Latency} = \text{Receive Time} - \text{Send Time}
+\]
+
+\subsubsection{Throughput}
+
+Throughput evaluates the amount of successfully transmitted industrial traffic per unit of time.
+
+\[
+\text{Throughput} = \frac{\text{Total Data Transferred}}{\text{Transmission Time}} \times 100
+\]
+
+\subsection{Tools}
+The experimental environment was implemented using virtualization, industrial simulation, network analysis, and cybersecurity tools capable of reproducing realistic industrial communication scenarios.
+
+\subsubsection{OpenPLC}
+OpenPLC was employed as the industrial controller platform for simulating PLC communications and industrial process control. OpenPLC provides support for industrial automation protocols and programmable control logic within virtualized environments.
+
+\subsubsection{Kali Linux}
+Kali Linux was utilized as the attacker environment for generating denial-of-service attacks and malicious network traffic. Kali Linux provides penetration testing tools capable of simulating SYN Flood, UDP Flood, ICMP Flood, and protocol-specific attacks.
+
+\subsubsection{Suricata}
+Suricata was implemented as the primary Intrusion Prevention System responsible for inline traffic inspection, attack detection, protocol analysis, and malicious packet filtering.
+
+\subsubsection{Snort}
+Snort was employed for comparative rule-based intrusion detection and traffic analysis within industrial communication environments.
+
+\subsubsection{Wireshark}
+Wireshark was used to capture and analyze industrial network traffic during baseline and attack conditions. Packet analysis enabled measurement of latency, packet loss, protocol behavior, and malicious traffic characteristics.
+
+\subsubsection{GNS3}
+GNS3 was utilized to simulate the industrial network topology, industrial switches, VLAN segmentation, and communication routing between industrial devices.
+
+\subsubsection{VirtualBox}
+VirtualBox was employed to host the virtual machines composing the industrial laboratory environment, including attacker systems, PLC nodes, SCADA services, and IPS infrastructure.
