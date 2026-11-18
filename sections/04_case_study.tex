@@ -1,19 +1,12 @@
 \section{Architecture and Experimental Setup}\label{sec:case-study}
 \subsection{Proposed Architecture}
-The architecture follows a hierarchical industrial design inspired by the Purdue model and by the reactive IPS concept of Fraunholz et al.\ \cite{fraunholz2018industrial}: a firewall separates the corporate network from the operational network, and an inline IPS between the SCADA layer and the PLC network inspects and filters traffic in real time (Fig.~\ref{fig:logical}). All segments are 802.1Q VLANs on one virtual industrial switch implemented with Open vSwitch, which has no physical ports: VLAN 10 (corporate, attacker), VLAN 20 (DMZ with the SCADA client), and VLAN 30 (PLC network), plus a management VLAN. A script verifies the segmentation before the experiment: the attacker cannot reach the SCADA or the PLC at layer 2, and the management VLAN is unreachable from VLAN 10. Table~\ref{tab:config} lists the five virtual machines.
+The architecture follows a hierarchical industrial design inspired by the Purdue model and by the reactive IPS concept of Fraunholz et al.\ \cite{fraunholz2018industrial}: a firewall separates the corporate network from the operational network, and an inline IPS between the SCADA layer and the PLC network inspects and filters traffic in real time (Fig.~\ref{fig:logical}). All segments are 802.1Q VLANs on one virtual industrial switch implemented with Open vSwitch, which has no physical ports: VLAN 10 (corporate, attacker), VLAN 20 (DMZ with the SCADA client), and VLAN 30 (PLC network), plus a management VLAN. A script verifies the segmentation before the experiment: the attacker cannot reach the SCADA or the PLC at layer 2, and the management VLAN is unreachable from VLAN 10. The five virtual machines are the attacker (VLAN 10; 2 vCPU, 1.25~GiB of RAM), the firewall with nftables (VLAN 10/20; 1 vCPU, 0.5~GiB), the SCADA client (VLAN 20; 1 vCPU, 0.75~GiB), the IPS with Suricata (VLAN 20/30; 2 vCPU, 1.5~GiB), and the PLC with OpenPLC (VLAN 30; 1 vCPU, 0.75~GiB).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{a0_logical_topology.pdf}
+\includegraphics[width=0.75\textwidth]{a0_logical_topology.pdf}
 \caption{Proposed industrial network topology: the corporate network (where the attacker is), the DMZ with the SCADA client, and the PLC network, separated by a firewall and an inline IPS.}\label{fig:logical}
 \end{figure}
-
-\begin{table}[H]
-\caption{Virtual machines of the testbed, their VLANs, and their resources.}\label{tab:config}
-\centering\footnotesize
-\setlength{\tabcolsep}{3pt}
-\input{tables/t_config.tex}
-\end{table}
 
 Everything runs on one physical laptop (Ryzen 5 6600H, 6 cores and 12 threads, 14.8~GiB of RAM, Linux with KVM), the only platform of the study, with each virtual CPU pinned to a host thread. The traffic is measured out of band: two mirror ports capture the VLAN 20 side (before the IPS) and the VLAN 30 side (after it), and no experimental packet passes through the capture.
 

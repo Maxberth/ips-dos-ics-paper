@@ -13,7 +13,7 @@ The baseline E0 gives 100\,\% of valid replies and an RTT p95 of 0.86~ms. Withou
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.78\textwidth]{r1_availability.pdf}
+\includegraphics[width=\textwidth]{r1_availability.pdf}
 \caption{Availability during the 60~s attack: (a) valid replies divided by requests issued; (b) divided by requests scheduled (10~Hz $\times$ 60~s). Each marker is one run, the black bar is the mean, and the dashed line is the baseline E0.}\label{fig:avail}
 \end{figure}
 
@@ -21,26 +21,20 @@ Per second (Fig.~\ref{fig:series}), the service falls when the attack starts and
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.82\textwidth]{r3_availability_timeseries.pdf}
+\includegraphics[width=\textwidth]{r3_availability_timeseries.pdf}
 \caption{Valid replies per second averaged over the 10 runs of each combination; the shaded band is the attack window.}\label{fig:series}
 \end{figure}
 
 \subsection{Attack Traffic Removed and Resource Use}
 In E3 the rules remove 99.7--100\,\% of the SYN, UDP, and ICMP floods (Table~\ref{tab:results}). In E2 no packet is dropped by a rule (Suricata reported zero blocked packets), so the 54--69\,\% that disappears is due to the overflow of the \texttt{NFQUEUE}: the IPS cannot process the flood. In E1 only 0--2\,\% disappears, attributed to the packets the capture discards. The counts are consistent across sources: in every run of E2 and E3 the packets entering the queues (nftables counters, both directions) equal the packets dropped by the queue plus the verdicts of Suricata (ratio 1.000; 0.998--1.006 in the Modbus runs of E3).
 
-CPU time of the virtual machines (hypervisor accounting, which can exceed 100\,\% because it includes emulation threads): without the IPS the PLC machine is close to saturation (82--103\,\% of its CPU); in E3 it is nearly idle (about 1\,\%) because the attack does not reach it, while the IPS machine uses all of its CPU under the volumetric floods. The inline IPS moves the bottleneck from the PLC to the IPS: it protects the PLC, but its capacity limits the legitimate traffic that is forwarded.
+CPU time of the virtual machines (hypervisor accounting, which can exceed 100\,\% because it includes emulation threads): without the IPS the PLC machine is close to saturation (82--103\,\% of its CPU); in E3 it is nearly idle (about 1\,\%) because the attack does not reach it, while the IPS machine uses all of its CPU under the volumetric floods. The inline IPS moves the bottleneck from the PLC to the IPS: it protects the PLC, but limits the legitimate traffic forwarded.
 
 \subsection{Statistical Comparison}
-Table~\ref{tab:tests} gives the effect sizes for $A_{sch}$. Without the IPS (E1), the service is better than with the IPS in the three volumetric floods ($\delta=+1.00$: every run of E1 above every run of E2 and E3). Between E2 and E3, drop mode is better only for SYN; for UDP and ICMP the difference is not significant, so the data do not show that dropping packets by rule improves the replies over alerting them, because the queue is the bottleneck in both. In the Modbus flood, E2 and E3 differ by a negligible amount (99.7\,\% against 100\,\%).
-
-\begin{table}[H]
-\caption{Cliff's $\delta$ of the first condition of each pair, replies/scheduled. Holm-corrected significance: ns, not significant; $*$, $p<0.05$; $**$, $p<0.01$; $***$, $p<0.001$. Last row: Fisher's exact $p$ for the PLC crashes.}\label{tab:tests}
-\centering\footnotesize
-\input{tables/t_tests.tex}
-\end{table}
+Conditions are compared on $A_{sch}$ (two-sided Mann--Whitney $U$, Holm-corrected over 12 comparisons, effect size Cliff's $\delta$). Without the IPS (E1), the service is better than with the IPS in the three volumetric floods ($\delta=+1.00$ and $p<0.01$ in all six comparisons: every run of E1 is above every run of E2 and E3). Between E2 and E3, drop mode is better only for SYN ($\delta=-1.00$, $p<0.01$ in favor of E3); for UDP ($\delta=+0.28$) and ICMP ($\delta=0.00$) the difference is not significant, so the data do not show that dropping packets by rule improves the replies over alerting them, because the queue is the bottleneck in both. In the Modbus flood, E2 and E3 differ by a negligible amount (99.7\,\% against 100\,\%).
 
 \subsection{Modbus/TCP Flood and PLC Crash}\label{sec:modbus}
-The Modbus flood sends valid requests at a low packet rate, so it does not degrade the replies during the attack in any condition (99.7--100\,\%). However, the OpenPLC runtime stopped when the attack ended in all runs of E1 and E2 and in 6 of 10 runs of E3. In E3 the rule cuts the flow of the attacker, which sends only 46 packets per second on average, but the difference with E1 is not significant (Fisher, $p=0.087$): rate-based rules are not enough to protect the PLC runtime in this testbed.
+The Modbus flood sends valid requests at a low packet rate, so it does not degrade the replies during the attack in any condition (99.7--100\,\%). However, the OpenPLC runtime stopped when the attack ended in all runs of E1 and E2 and in 6 of 10 runs of E3. In E3 the rule cuts the flow of the attacker, which sends only 46 packets per second on average, but the difference with E1 is not significant (Fisher's exact test, $p=0.087$): rate-based rules are not enough to protect the PLC runtime in this testbed.
 
 \subsection{Detection and Rule Behavior}\label{sec:fp}
 The rules produced alerts in all 80 runs of E2 and E3. For SYN and ICMP in E3 the alerts are almost the packets processed by Suricata (99.8\,\%). For UDP the number of alerts is nearly constant (about 65\,500 per run) whatever the number of packets: in a calibration run with full alert logging (not part of the 130 runs) each alert corresponded to a different UDP source port, that is, one alert per flow, so a per-packet detection rate is reported only for SYN and ICMP.
@@ -48,4 +42,4 @@ The rules produced alerts in all 80 runs of E2 and E3. For SYN and ICMP in E3 th
 In four calibration runs in drop mode with full logging, the Modbus rule dropped 133--162 packets of the legitimate SCADA client per run, at the end of the 30~s attack and during the cool-down, when the client reconnects. This false positive of a rate-based rule is consistent with E3 not returning to 100\,\% right after the attack (Fig.~\ref{fig:series}), but it does not explain the loss during the attack; it was not quantified in the 130 runs, where the log stored only counters.
 
 \subsection{Threats to Validity}
-The measurements come from one physical host with virtual machines and a virtual switch, so absolute values (RTT, capacity of the IPS) do not transfer to a physical PLC or industrial switch, which were not evaluated; the CPU time is measured in a virtual machine, and the capture discarded up to 13.8\,\% of the packets in some runs of E1. Six runs (five of E3 with ICMP and one of E1 with ICMP) started with the host colder than the others because of a defect in the temperature check of the scripts, which was corrected; their measurements are complete, and the sample does not allow attributing the lower E3 availability observed in them to the cold start. The Modbus rule was not recalibrated, and Snort was not evaluated.
+The measurements come from one physical host with virtual machines and a virtual switch, so absolute values (RTT, capacity of the IPS) do not transfer to a physical PLC or industrial switch, which were not evaluated; the capture discarded up to 13.8\,\% of the packets in some runs of E1. Six runs (five of E3 with ICMP and one of E1 with ICMP) started with the host colder than the others because of a defect in the temperature check of the scripts, which was corrected; their measurements are complete, and the sample does not allow attributing the lower E3 availability observed in them to the cold start. The Modbus rule was not recalibrated, and Snort was not evaluated.
