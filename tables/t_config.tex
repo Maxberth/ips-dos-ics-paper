@@ -1,0 +1,11 @@
+\begin{tabular}{lllrr}
+\toprule
+VM & Role / software & VLAN & vCPU & RAM (GiB)\\
+\midrule
+attacker & Attacker: hping3, Python flood script & 10 & 2 & 1.25\\
+fw & Firewall/router: nftables & 10/20 & 1 & 0.5\\
+scada & SCADA client (Python, 10 Hz) & 20 & 1 & 0.75\\
+ips & Inline IPS: Suricata 7.0.10, NFQUEUE & 20/30 & 2 & 1.5\\
+plc & PLC: OpenPLC runtime (Modbus/TCP) & 30 & 1 & 0.75\\
+\bottomrule
+\end{tabular}

@@ -1,226 +1,53 @@
 \section{Results and Discussion}\label{sec:results}
-The effectiveness of the proposed Intrusion Prevention System (IPS) architecture was evaluated under three Denial-of-Service (DoS) attack scenarios targeting industrial communication services. The experiments compared the behavior of the industrial network before and after IPS deployment using the metrics defined in Section 3.4.
+All results come from 130 runs (10 per combination) measured on the platform described in Section~\ref{sec:case-study}; all values are means with 95\,\% confidence intervals unless stated otherwise. Table~\ref{tab:results} summarizes the results. The raw measurements and the scripts that produce every table and figure are in the repository of the project.
 
-\subsection{Scenario 1 -- TCP SYN Flood}
-The topology simulates an industrial network environment designed in GNS3 to evaluate the impact of a TCP SYN Flood attack on the Modbus/TCP service of a PLC operating on port 502. The main objective is to analyze the degradation of communication performance and the effectiveness of an Intrusion Prevention System (IPS) in mitigating this type of attack.
+\begin{table}[H]
+\caption{Results by condition and attack (mean $\pm$ 95\,\% CI, $n=10$ runs per row). Replies/issued is $A_{iss}$ and Replies/sched.\ is $A_{sch}$; Removed is the percentage of attack packets that do not reach the PLC network; PLC down is the number of runs in which the PLC runtime had stopped after the attack.}\label{tab:results}
+\centering\scriptsize
+\setlength{\tabcolsep}{3pt}
+\input{tables/t_results.tex}
+\end{table}
+
+\subsection{Service Availability}
+Figure~\ref{fig:avail} shows the availability of the SCADA client during the attack. The baseline E0 gives 100\,\% of valid replies and an RTT p95 of 0.86~ms. Without the IPS (E1), the SYN, UDP, and ICMP floods leave the PLC answering almost every request ($A_{iss}\geq 99.2\,\%$), although the flood reaches the PLC at 150\,000--180\,000 packets per second. With the IPS in alert mode (E2) the service degrades sharply: $A_{iss}$ is 3.4\,\% for SYN, 66.7\,\% for UDP, and 49.1\,\% for ICMP, and the runs of E2 vary a great deal (from 2.5\,\% to 83\,\% with ICMP and from 30\,\% to 85\,\% with UDP). With the IPS in drop mode (E3), $A_{iss}$ is between 73\,\% and 77\,\% for the three volumetric floods.
+
+The closed-loop client issues fewer requests when replies are missing (for example, 119 of the 600 scheduled in E2 with SYN). Measured against the scheduled requests, the service in E3 is lower, 42--49\,\% (Fig.~\ref{fig:avail}b and Table~\ref{tab:results}). Both quantities are reported because $A_{iss}$ alone overstates the service when the PLC stops answering. The RTT p95 of the replies that do arrive (Table~\ref{tab:results}) rises from 0.86~ms (E0) to 4.3--260~ms in E1 and 200--390~ms with the IPS; in runs with very few replies it describes few observations.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{scenario1_tcp_syn_flood.png}
-    \caption{TCP SYN Flood to PLC (Port 502)}
-    \label{fig:scenario1-overview}
-\end{figure}
-
-\textbf{Network Structure}\\
-The network is divided into three main zones, each isolated through VLAN segmentation to ensure controlled traffic flow and security:
-
-\begin{table*}[htbp]
-\caption{Topology of TCP SYN Flood Scenario} 
-\scriptsize 
 \centering
-\begin{tabular}{p{2.0cm} c p{3.6cm} p{3.2cm}}
-\toprule
-\textbf{Zone} & \textbf{VLAN} & \textbf{Components} & \textbf{Function} \\
-\midrule
-IT (Attacker) & VLAN 10 & Kali Linux (192.168.10.100) & Launches TCP SYN Flood toward PLC. \\
-WAN / LAN (Firewall) & VLAN 10 / 20 & pfSense 2.8.0-1 (192.168.10.1 / 192.168.20.1) & Acts as firewall and router between networks. \\
-DMZ (IPS) & VLAN 20 & Suricata IPS (Ubuntu Server, 192.168.20.2) & Inline mode; inspects and blocks malicious traffic. \\
-Industrial Network & VLAN 30 & OpenPLC (192.168.1.10), SCADA/HMI (192.168.1.20) & Industrial control zone protected by IPS. \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-\textbf{Attack Behavior}\\
-The Kali Linux attacker floods the PLC's Modbus/TCP port (502) with numerous SYN requests, creating a large number of half-open TCP connections.
-Without IPS protection, the PLC suffers severe communication degradation, increased latency, and reduced availability.
-When the Suricata IPS is active, malicious traffic is detected and blocked, maintaining stable communication between the PLC and SCADA systems.
-
-\textbf{Purpose of the Scenario}\\
-This setup enables quantitative analysis of key performance metrics such as packet loss, latency, PLC availability, CPU utilization, and throughput, demonstrating the IPS's effectiveness in defending industrial networks against Denial-of-Service (DoS) attacks.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{tcp_syn_attack.png}
-    \caption{TCP SYN Flood to PLC (Port 502)}
-    \label{fig:tcp-syn-attack}
+\includegraphics[width=0.88\textwidth]{r1_availability.pdf}
+\caption{Availability of the SCADA client during the 60~s attack: (a) valid replies divided by requests issued; (b) valid replies divided by requests scheduled (10~Hz $\times$ 60~s). Each marker is one run, the black bar is the mean, and the dashed line is the baseline E0.}\label{fig:avail}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{latency_packet_loss_without_ips.png}
-    \caption{Latency and packet loss without IPS}
-    \label{fig:latency-loss-without-ips}
-\end{figure}
+Figure~\ref{fig:series} shows the same quantity per second. The service falls when the attack starts and recovers when it ends, except in E3, which stays at about 92\,\% in the 10~s after the attack (Section~\ref{sec:fp}). The Modbus flood does not affect the replies during the attack, but the PLC stops answering when the attack ends (Section~\ref{sec:modbus}).
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{plc_cpu_usage_without_ips.png}
-    \caption{TCP SYN Flood to PLC PCL CPU Usage WITHOUT IPS}
-    \label{fig:plc-cpu-without-ips}
+\centering
+\includegraphics[width=0.92\textwidth]{r3_availability_timeseries.pdf}
+\caption{Valid replies per second, averaged over the 10 runs of each combination. The shaded band is the attack window.}\label{fig:series}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{suricata_detection.png}
-    \caption{Attack detection by Suricata (IPS)}
-    \label{fig:suricata-detection}
-\end{figure}
+\subsection{Attack Traffic Removed and Resource Use}
+The column Removed of Table~\ref{tab:results} gives the share of attack packets that do not reach the PLC network, measured on the mirror ports. In E3 the rules remove 99.7--100\,\% of the SYN, UDP, and ICMP floods. In E2 the rules only alert, so no packet is dropped by a rule (Suricata reported zero blocked packets), and the 54--69\,\% that disappears is due to the overflow of the \texttt{NFQUEUE}: the IPS cannot process the flood. In E1 only 0--2\,\% disappears; there is no IPS in that condition, so this difference is attributed to the packets that the capture tool discards. The packet counts are consistent across sources: for every run of E2 and E3, the packets that enter the queues (nftables counters, both directions) equal the packets dropped by the queue plus the verdicts of Suricata, with a ratio of 1.000 (0.998--1.006 in the Modbus runs of E3).
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{latency_packet_loss_with_ips.png}
-    \caption{Latency and packet loss with IPS}
-    \label{fig:latency-loss-with-ips}
-\end{figure}
+The CPU time of the virtual machines during the attack (hypervisor accounting, relative to the number of virtual CPUs) shows where the load goes. Without the IPS (E1), the PLC machine is close to saturation (82--103\,\% of its CPU) during the three volumetric floods and the Modbus flood. In E3 the PLC machine is nearly idle (about 1\,\%) because the attack does not reach it, while under the three volumetric floods the IPS machine uses all of its CPU time. The values can exceed 100\,\% because the CPU time of the hypervisor includes the emulation and I/O threads of each virtual machine. In other words, the inline IPS moves the bottleneck from the PLC to the IPS: it protects the PLC but its capacity limits the legitimate traffic that is forwarded.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{ips_blocking_rule.png}
-    \caption{IPS blocking rule}
-    \label{fig:ips-blocking-rule}
-\end{figure}
+\subsection{Statistical Comparison}
+Table~\ref{tab:tests} gives the effect sizes and the significance of the comparisons for $A_{sch}$. Without the IPS (E1), the service is better than with the IPS (E2 and E3) in the three volumetric floods ($\delta=+1.00$, every run of E1 above every run of E2 and E3). Between E2 and E3, drop mode is better only for the SYN flood; for UDP and ICMP the difference is not significant, so the data do not show that dropping the packets by rule improves the replies over alerting them, because in both conditions the queue is the bottleneck. In the Modbus flood, E2 and E3 differ by a practically negligible amount (99.7\,\% against 100\,\%).
 
-\begin{table}[htbp]
-\caption{Results of TCP SYN Flood Attack} 
-\scriptsize 
-\begin{tabular}{l c c c}
-\toprule
-\textbf{Metric} & \textbf{Without IPS} & \textbf{With IPS} & \textbf{Improvement} \\
-\midrule
-Packet Loss (\%) & 42.8 & 4.7 & 89.0\% \\
-Network Latency (ms) & 325 & 48 & 85.2\% \\
-PLC Availability (\%) & 61.5 & 98.3 & +36.8\% \\
-Detection Rate (\%) & N/A & 98.9 & -- \\
-CPU Utilization (\%) & 91 & 54 & 40.7\% \\
-Throughput (Mbps) & 18 & 92 & 411\% \\
-\bottomrule
-\end{tabular}
+\begin{table}[H]
+\caption{Cliff's $\delta$ for the first condition of each pair, replies/scheduled. Significance after Holm's correction: ns, not significant; $*$, $p<0.05$; $**$, $p<0.01$; $***$, $p<0.001$. Last row: $p$ values of Fisher's exact test for the PLC crashes.}\label{tab:tests}
+\centering\footnotesize
+\input{tables/t_tests.tex}
 \end{table}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{latency_comparison.png}
-    \caption{Network Latency Comparison}
-    \label{fig:latency-comparison}
-\end{figure}
+\subsection{Modbus/TCP Flood and PLC Crash}\label{sec:modbus}
+The Modbus flood sends valid requests at a low packet rate, so it does not degrade the replies during the attack in any condition (99.7--100\,\%). However, the OpenPLC runtime stopped when the attack ended in all runs of E1 and E2 (10 of 10) and in 6 of 10 runs of E3. In E3 the rule cuts the flow of the attacker, which sends only 46 packets per second on average, but the difference in crashes with E1 is not significant (Fisher, $p=0.087$). The Modbus flood therefore shows that the rate-based rules are not enough to protect the PLC runtime in this testbed.
 
-The results demonstrate that the SYN Flood attack severely affected PLC communications when no protection mechanism was present. After enabling Suricata in inline mode, malicious TCP connection attempts were identified and blocked before reaching the PLC. Packet loss decreased from 42.8\% to 4.7\%, while PLC availability increased to 98.3\%.\\
+\subsection{Detection and Rule Behavior}\label{sec:fp}
+The rules produced alerts in all 80 runs of E2 and E3. For the SYN and ICMP floods in E3, the number of alerts is almost the number of packets processed by Suricata (99.8\,\%). For UDP, in contrast, the number of alerts is nearly constant, about 65\,500 per run, whatever the number of packets: in a calibration run with full alert logging (not part of the 130 runs), each alert corresponded to a different UDP source port, that is, one alert per flow and not one per packet. A per-packet detection rate is therefore reported only for SYN and ICMP, and the detection of UDP is reported per run and per flow.
 
-Figure~\ref{fig:latency-comparison} shows that the IPS considerably reduced the average communication delay in all evaluated attack scenarios. Under the TCP SYN Flood attack, latency decreased from 325 ms to only 48 ms, demonstrating that the inline IPS effectively prevented resource exhaustion before malicious traffic reached the PLC.
+The same calibration, repeated in four runs in drop mode with full logging, showed that the Modbus rule dropped 133--162 packets of the legitimate SCADA client per run, at the end of the 30~s attack and during the cool-down, when the client reconnects. This is a false positive of a rate-based rule, and it is consistent with the service not returning to 100\,\% right after the attack in E3 (Fig.~\ref{fig:series}). It does not explain the loss of replies during the attack, because the SCADA packets were not dropped by the rule during most of the attack. These false positives were not quantified in the 130 runs, in which the log only stored counters.
 
-\subsection{Scenario 2 -- Modbus/TCP Flood}
-The Modbus/TCP Flood attack generates excessive industrial requests directed toward the PLC communication service. This scenario specifically evaluates the protocol-aware inspection capabilities of the IPS.
-\textbf{Attack Behavior}\\
-The attack simulates malicious traffic targeting industrial communication protocols in order to overload the PLC processing capabilities. The attacker machine, running Kali Linux, floods the PLC with unauthorized Modbus/TCP requests, which severely impacts PLC response time and SCADA communication stability.
-To generate this malicious traffic in the experimental environment, the following command-line tools can be utilized:
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{scapy_generation.png}
-    \caption{Using Scapy for packet generation}
-    \label{fig:scapy-generation}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{modbus_testing.png}
-    \caption{Using Modbus testing utilities}
-    \label{fig:modbus-testing}
-\end{figure}
-
-\begin{table}[htbp]
-\caption{Results of Modbus/TCP Flood Attack} 
-\scriptsize 
-\begin{tabular}{l c c c}
-\toprule
-\textbf{Metric} & \textbf{Without IPS} & \textbf{With IPS} & \textbf{Improvement} \\
-\midrule
-Packet Loss (\%) & 38.4 & 3.5 & 90.9\% \\
-Network Latency (ms) & 290 & 41 & 85.9\% \\
-PLC Availability (\%) & 67.2 & 99.1 & +31.9\% \\
-Detection Rate (\%) & N/A & 99.3 & -- \\
-CPU Utilization (\%) & 88 & 50 & 43.2\% \\
-Throughput (Mbps) & 22 & 95 & 331.8\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{packet_loss_comparison.png}
-    \caption{Packet Loss Comparison}
-    \label{fig:packet-loss-comparison}
-\end{figure}
-
-The Modbus/TCP Flood attack produced a considerable increase in PLC processing load and communication delay. The IPS successfully detected abnormal traffic patterns targeting TCP port 502 and blocked malicious requests. The detection rate reached 99.3\%, demonstrating the effectiveness of Deep Packet Inspection (DPI) for industrial protocols.\\
-
-Figure~\ref{fig:packet-loss-comparison} illustrates the significant reduction in packet loss after IPS deployment. During the Modbus/TCP Flood attack, packet loss decreased from 38.4\% to only 3.5\%, confirming the effectiveness of Deep Packet Inspection (DPI) in filtering malicious industrial traffic.
-
-\subsection{Scenario 3 -- ICMP Flood}
-The ICMP Flood attack focuses on saturating the industrial network bandwidth and increasing communication latency between SCADA systems and PLC devices. This scenario evaluates the IPS capability to preserve network stability and resource availability under a volumetric attack.
-\textbf{Attack Behavior}\\
-By generating a massive volume of ICMP Echo Request packets, the attacker aims to exhaust network throughput and introduce significant delays, which can disrupt the deterministic nature of industrial communications.\\
-
-To generate this malicious traffic in the experimental environment, the following command can be utilized from the attacker machine:
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{icmp_ping_flood.png}
-    \caption{Using the ping flood command}
-    \label{fig:icmp-ping-flood}
-\end{figure}
-
-\begin{table}[htbp]
-\caption{Results of ICMP Flood Attack} 
-\scriptsize 
-\begin{tabular}{l c c c}
-\toprule
-\textbf{Metric} & \textbf{Without IPS} & \textbf{With IPS} & \textbf{Improvement} \\
-\midrule
-Packet Loss (\%) & 31.7 & 2.9 & 90.8\% \\
-Network Latency (ms) & 265 & 35 & 86.8\% \\
-PLC Availability (\%) & 74.8 & 99.5 & +24.7\% \\
-Detection Rate (\%) & N/A & 97.8 & -- \\
-CPU Utilization (\%) & 76 & 47 & 38.2\% \\
-Throughput (Mbps) & 30 & 98 & 226.7\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{plc_availability_comparison.png}
-    \caption{PLC Availability Comparison}
-    \label{fig:plc-availability-comparison}
-\end{figure}
-
-The ICMP Flood attack affected overall network performance by consuming bandwidth resources. However, the IPS successfully filtered excessive ICMP traffic and maintained communication stability. The average latency was reduced from 265 ms to 35 ms, while PLC availability remained above 99%.
-
-\subsection{Overall Performance Analysis}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{throughput_comparison.png}
-    \caption{Throughput Comparison}
-    \label{fig:throughput-comparison}
-\end{figure}
-
-Figure~\ref{fig:throughput-comparison} shows that the deployment of the IPS significantly increased the amount of legitimate traffic successfully processed during all attack scenarios. The largest improvement was observed during the TCP SYN Flood attack, where throughput increased from 18 Mbps to 92 Mbps.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{cpu_utilization_comparison.png}
-    \caption{CPU Utilization Comparison}
-    \label{fig:cpu-utilization-comparison}
-\end{figure}
-
-Figure~\ref{fig:cpu-utilization-comparison} demonstrates that, despite the additional processing required by the IPS, the overall CPU utilization of the protected industrial environment remained substantially lower than under attack conditions without protection.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.47\textwidth]{performance_curve.png}
-    \caption{Conceptual Performance Evolution During Attack Mitigation}
-    \label{fig:performance-curve}
-\end{figure}
-
-Figure~\ref{fig:performance-curve} summarizes the overall behavior of the proposed architecture throughout the experimental stages. Although the figure represents normalized experimental averages rather than continuous time-series measurements, it clearly illustrates the reduction in network latency after IPS activation and the subsequent stabilization of industrial communications.
+\subsection{Threats to Validity}
+The measurements come from one physical host with virtual machines and a virtual switch, so absolute values (RTT, capacity of the IPS) are specific to this hardware and do not transfer to a physical PLC or industrial switch, which were not evaluated. The CPU time is measured in a virtual machine, and the capture tool discarded up to 13.8\,\% of the packets in some runs of E1. Six runs (five of E3 with ICMP and one of E1 with ICMP) started with the host colder than the others because of a defect in the temperature check of the scripts, which was corrected; their measurements are complete, and the sample does not allow attributing the lower E3 availability observed in them to the cold start. The Modbus rule was not recalibrated, and Snort was not evaluated.

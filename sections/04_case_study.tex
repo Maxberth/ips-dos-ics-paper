@@ -1,322 +1,69 @@
-\section{Case Study}\label{sec:case-study}
-The proposed architecture is mainly based on the approaches presented by \cite{fraunholz2018industrial} and complemented with industrial intrusion detection models proposed in \cite{sayegh2019ids}.
-
-The architecture follows a hierarchical industrial network design based on IT/OT segmentation and the deployment of an Intrusion Prevention System (IPS) to mitigate Denial of Service (DoS) attacks targeting Programmable Logic Controllers (PLCs) and industrial switches.
-
-The proposed solution incorporates:
-\begin{itemize}
-    \item Network segmentation using VLANs,
-    \item Separation between IT and OT environments,
-    \item Inline IPS inspection,
-    \item Monitoring of industrial protocols,
-    \item Protection of PLC communication channels.
-\end{itemize}
-
-According to Fraunholz et al. \cite{fraunholz2018industrial}, industrial IPS architectures should provide reactive protection mechanisms capable of identifying malicious traffic patterns and preventing attacks before they impact industrial devices.
-
-Additionally, Ahmed et al. \cite{ahmed2019survey}, recommend the implementation of Purdue-based segmentation models to isolate operational technology (OT) networks from corporate infrastructures.
-
-The proposed architecture aims to:
-\begin{itemize}
-    \item Protect PLCs against DoS attacks,
-    \item Improve industrial network availability,
-    \item Detect anomalous industrial traffic,
-    \item Reduce propagation of attacks within OT environments,
-    \item Maintain stable communication between SCADA systems and PLCs.
-\end{itemize}
-
-\subsection{Network Architecture}
-The network architecture follows a layered industrial control system (ICS) design inspired by the Purdue Enterprise Reference Architecture and the IPS deployment proposed by Fraunholz et al. \cite{fraunholz2018industrial}.
-
-The architecture separates the corporate network from the operational network using firewalls, industrial switches, VLAN segmentation, and an inline Intrusion Prevention System (IPS).
-
-The IPS is strategically deployed between the SCADA layer and the PLC network in order to inspect traffic in real time and mitigate potential flooding attacks targeting industrial devices.
-
-The proposed architecture includes the following components:
-
-\begin{table}[htbp]
-\caption{Components of the Proposed Industrial Architecture} 
-\centering
-\scriptsize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{l c c}
-\toprule
-\textbf{Component} & \textbf{Function} & \textbf{Reference} \\
-\midrule
-PLC & Industrial process control & \cite{fraunholz2018industrial} \\
-SCADA/HMI & Monitoring and supervision & \cite{fraunholz2018industrial} \\
-Industrial Switch & VLAN segmentation and traffic control & \cite{sayegh2019ids} \\
-Firewall & IT/OT network separation & \cite{ahmed2019survey} \\
-IPS (Suricata/Snort) & Attack detection and mitigation & \cite{fraunholz2018industrial} \\
-Monitoring Station & Traffic analysis and packet capture & \cite{sayegh2019ids} \\
-Attacker Machine & DoS attack generation & Experimental environment \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
-
-
-The industrial switch is responsible for managing VLAN segmentation and isolating traffic between the SCADA network and PLC devices. According to Sayegh et al. \cite{sayegh2019ids}, segmentation mechanisms improve the security posture of industrial Ethernet networks by reducing unnecessary broadcast traffic and limiting attack propagation.
-
-The IPS performs Deep Packet Inspection (DPI) on industrial protocols such as Modbus/TCP and Ethernet/IP. This allows the detection of abnormal traffic patterns associated with DoS attacks.
-
-The architecture also incorporates a Demilitarized Zone (DMZ) between the enterprise network and the industrial network to provide an additional security layer, as recommended in \cite{ahmed2019survey}.
-
-\subsection{Topology}
-The proposed topology follows a hierarchical Industrial Control System (ICS) architecture inspired by the Purdue Enterprise Reference Model and the distributed intrusion detection approach proposed by Mansfield et al. \cite{mansfield2020threeTier}.
-
-The architecture separates the corporate network from the operational technology (OT) environment through the use of firewalls, industrial switches, and VLAN segmentation. An inline Intrusion Prevention System (IPS) is deployed between the SCADA layer and the PLC network to monitor and mitigate malicious traffic in real time.
-
-The proposed topology is illustrated in Figure~\ref{fig:industrial_topology}.
+\section{Architecture and Experimental Setup}\label{sec:case-study}
+\subsection{Proposed Architecture}
+The architecture follows a hierarchical industrial design inspired by the Purdue model and by the reactive IPS concept of Fraunholz et al.\ \cite{fraunholz2018industrial}. It separates the corporate network from the operational network with a firewall and VLAN segmentation, and it places an inline IPS between the SCADA layer and the PLC network to inspect and filter traffic in real time (Fig.~\ref{fig:logical}). All segments are 802.1Q VLANs on a single virtual industrial switch implemented with Open vSwitch, which has no physical ports. The corporate network is VLAN 10 (192.168.10.0/24), the DMZ with the SCADA client is VLAN 20 (192.168.20.0/24), and the PLC network is VLAN 30 (192.168.30.0/24); Table~\ref{tab:config} lists the machines and their VLANs.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.3\textwidth]{network_topology.jpeg}
-    \caption{Proposed industrial network topology}
-    \label{fig:industrial_topology}
+\centering
+\includegraphics[width=0.78\textwidth]{a0_logical_topology.pdf}
+\caption{Proposed industrial network topology: the corporate network (where the attacker is located), the DMZ with the SCADA client, and the PLC network, separated by a firewall and an inline IPS.}\label{fig:logical}
 \end{figure}
 
-According to Fraunholz et al. \cite{fraunholz2018industrial}, network segmentation and the implementation of a DMZ reduce the propagation of attacks within industrial environments and improve the monitoring capabilities of security systems.
+\subsection{Testbed}
+Everything runs on one physical laptop (Ryzen 5 6600H, 6 cores and 12 threads, 14.8~GiB of RAM, Linux host with KVM) that is the only platform of the study. Figure~\ref{fig:testbed} shows the virtual machines and the measurement points, and Table~\ref{tab:config} their roles and resources. Each virtual CPU is pinned to a host thread. The traffic is measured out of band: two mirror ports capture the traffic on the VLAN 20 side (before the IPS) and on the VLAN 30 side (after the IPS), and no packet of the experiment passes through the capture.
 
-The industrial switch is responsible for managing traffic isolation between VLANs and prioritizing industrial communications. Sayegh et al. \cite{sayegh2019ids}, indicate that traffic segmentation improves the resilience of industrial Ethernet networks against denial-of-service attacks.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{a1_topology.pdf}
+\caption{Testbed: virtual machines, virtual switch, and measurement points.}\label{fig:testbed}
+\end{figure}
 
-The proposed VLAN segmentation is presented in Table~\ref{tab:vlan_segmentation}.
-
-\begin{table}[htbp]
-\caption{Proposed VLAN Segmentation} 
-\scriptsize 
-\begin{tabular}{l c c c} 
-\toprule
-\textbf{VLAN} & \textbf{Purpose} & \textbf{Reference} \\
-\midrule
-VLAN 10 & Corporate network & Purdue Model \\
-VLAN 20 & SCADA/HMI communication & \cite{ahmed2019survey} \\
-VLAN 30 & PLC network & \cite{fraunholz2018industrial} \\
-VLAN 99 & Network management & Industrial segmentation practice \\
-\bottomrule
-\end{tabular}
-\label{tab:vlan_segmentation}
+\begin{table}[H]
+\caption{Virtual machines of the testbed, their VLANs, and their resources.}\label{tab:config}
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{tables/t_config.tex}
 \end{table}
 
 \subsection{IPS Configuration}
+In the conditions E2 and E3 all packets forwarded between VLAN 20 and VLAN 30, in both directions, are sent to two \texttt{NFQUEUE} queues (one per virtual CPU of the IPS, with the load shared by flow hash), and Suricata returns the verdict (Fig.~\ref{fig:datapath}). The queue has no bypass: if Suricata does not read it, the traffic is cut (fail-closed). The default exception policy of Suricata and the TCP stream validation were disabled, because with the defaults the engine dropped traffic without any rule matching, which would have mixed the effect of the rules with that of the engine. In E1 the same route is used without the queue, so that only the action changes between conditions.
 
-The Intrusion Prevention System (IPS) configuration is based on the reactive protection architecture proposed by Fraunholz et al. \cite{fraunholz2018industrial}. The IPS is deployed in inline mode to inspect industrial traffic before it reaches PLC devices.
-
-The IPS performs Deep Packet Inspection (DPI) on industrial communication protocols such as Modbus/TCP and Ethernet/IP. According to Sayegh et al. \cite{sayegh2019ids}, protocol-aware traffic inspection improves the detection accuracy of attacks targeting industrial control systems.
-
-The proposed IPS configuration parameters are presented in Table~\ref{tab:ips_configuration}.
-
-\begin{table}[htbp]
-\caption{IPS Configuration Parameters} 
+\begin{figure}[H]
 \centering
-\scriptsize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{l c c}
-\toprule
-\textbf{Parameter} & \textbf{Configuration} & \textbf{Reference} \\
-\midrule
-IPS Tool & Suricata & \cite{fraunholz2018industrial} \\
-Deployment Mode & Inline & \cite{fraunholz2018industrial} \\
-Protected Protocol & Modbus/TCP & \cite{sayegh2019ids} \\
-Detection Method & Signature-based & \cite{fraunholz2018industrial} \\
-Packet Inspection & Deep Packet Inspection (DPI) & \cite{sayegh2019ids} \\
-Logging & Enabled & Security monitoring practice \\
-Automatic Blocking & Enabled & Reactive protection approach \\
-\bottomrule
-\end{tabular}%
-}
-\label{tab:ips_configuration}
-\end{table}
+\includegraphics[width=0.92\textwidth]{a2_ips_datapath.pdf}
+\caption{Data path of the inline IPS. Replies of the PLC travel through the same queues.}\label{fig:datapath}
+\end{figure}
 
-
-The IPS uses custom detection rules to identify traffic flooding attacks directed to the PLC communication port (TCP port 502).
-
-An example of a Suricata detection rule is shown below:
-
+The blocking rules of condition E3 are shown below (abbreviated); in E2 the same rules use the \texttt{alert} action. Each rule counts the packets of one source per second; the thresholds are 100 packets for SYN and UDP, 50 for ICMP, and 20 segments with data for Modbus/TCP.
+{\scriptsize
 \begin{verbatim}
-alert tcp any any -> 192.168.1.10 502
-(msg:"Possible Modbus TCP Flood";
-flow:to_server;
-threshold:type both, track by_src,
-count 50, seconds 1;
-sid:100001;)
-\end{verbatim}
-
-The rule detects excessive TCP requests directed to the Modbus/TCP service and generates alerts when abnormal traffic thresholds are exceeded.
-
-According to Fraunholz et al. \cite{fraunholz2018industrial}, inline IPS deployment allows real-time mitigation actions such as:
-\begin{itemize}
-    \item automatic packet filtering,
-    \item malicious IP blocking,
-    \item rate limiting,
-    \item abnormal traffic isolation.
-\end{itemize}
+drop tcp any any -> 192.168.30.10 502 (msg:"LAB SYN flood";
+  flags:S,12; detection_filter:track by_src, count 100, seconds 1; sid:1000001;)
+drop udp any any -> 192.168.30.10 any (msg:"LAB UDP flood";
+  detection_filter:track by_src, count 100, seconds 1; sid:1000002;)
+drop icmp any any -> 192.168.30.10 any (msg:"LAB ICMP echo flood";
+  itype:8; detection_filter:track by_src, count 50, seconds 1; sid:1000003;)
+drop tcp any any -> 192.168.30.10 502 (msg:"LAB Modbus/TCP flood";
+  flow:to_server,established; dsize:>0;
+  detection_filter:track by_src, count 20, seconds 1; sid:1000004;)
+\end{verbatim}}
 
 \subsection{Attack Scenarios}
-
-The attack scenarios were designed based on methodologies commonly used in Industrial Control System (ICS) security research to evaluate the effectiveness of intrusion prevention systems against Denial of Service (DoS) attacks.
-
-According to Fraunholz et al. \cite{fraunholz2018industrial}, PLCs are particularly vulnerable to flooding attacks due to their limited computational resources and strict real-time communication requirements.
-
-The experimental environment considers multiple attack scenarios targeting industrial communication services such as Modbus/TCP.
-
-\subsubsection{Scenario 1 -- TCP SYN Flood}
-
-The first attack scenario consists of a TCP SYN Flood directed toward the PLC Modbus/TCP service operating on port 502.
-
-The objective of this attack is to saturate the communication resources of the PLC by generating a massive number of incomplete TCP connection requests.
-
-The attack is generated using the \texttt{hping3} tool:
-
-\begin{verbatim}
-hping3 -S --flood -V -p 502 192.168.1.10
-\end{verbatim}
-
-According to Ahmed et al. \cite{ahmed2019survey}, SYN Flood attacks can significantly degrade the availability of industrial services and interrupt SCADA communications.
-
-\subsubsection{Scenario 2 -- Modbus/TCP Flood}
-
-This scenario focuses on flooding the PLC with excessive Modbus/TCP requests.
-
-The attack simulates malicious traffic directed toward industrial communication protocols in order to overload the PLC processing capabilities.
-
-According to Sayegh et al. \cite{sayegh2019ids}, abnormal traffic patterns in industrial Ethernet protocols can negatively affect:
-\begin{itemize}
-    \item PLC response time,
-    \item SCADA communication stability,
-    \item network throughput,
-    \item industrial process availability.
-\end{itemize}
-
-The attack traffic may be generated using tools such as:
-\begin{itemize}
-    \item Scapy,
-    \item Modbus testing utilities,
-    \item custom packet generators.
-\end{itemize}
-
-\subsubsection{Scenario 3 -- ICMP Flood}
-
-The third attack scenario consists of an ICMP Flood attack targeting the industrial network.
-
-The objective is to consume network bandwidth and increase communication latency between SCADA systems and PLC devices.
-
-The attack can be generated using the following command:
-
-\begin{verbatim}
-ping -f 192.168.1.10
-\end{verbatim}
-
-According to Fraunholz et al. \cite{fraunholz2018industrial}, excessive ICMP traffic may affect the stability of industrial Ethernet communications and reduce system availability.
-
-The evaluation variables used during the experiments are presented in Table~\ref{tab:evaluation_variables}.
-
-\begin{table}[htbp]
-\caption{Evaluation Variables for Attack Scenarios} 
-\centering
-\scriptsize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{l c c}
-\toprule
-\textbf{Variable} & \textbf{Description} & \textbf{Reference} \\
-\midrule
-Packet Loss & Lost packets during attacks & \cite{fraunholz2018industrial} \\
-Latency & Communication delay & \cite{sayegh2019ids} \\
-Detection Rate & IPS attack detection accuracy & \cite{mansfield2020threeTier} \\
-CPU Usage & PLC resource consumption & \cite{ahmed2019survey} \\
-Network Throughput & Network traffic performance & ICS performance metrics \\
-Availability & Operational continuity of PLC services & \cite{fraunholz2018industrial} \\
-\bottomrule
-\end{tabular}%
-}
-\label{tab:evaluation_variables}
-\end{table}
-
+All attacks come from one address in VLAN 10, target the PLC at 192.168.30.10, and never leave the host: a TCP SYN flood (\texttt{hping3 -S -p 502 --flood}), a UDP flood (\texttt{hping3 --udp -p 502 --flood}), an ICMP flood (\texttt{hping3 --icmp --flood}), and a Modbus/TCP flood, a Python script that opens 8 TCP connections and sends valid \texttt{Read Holding Registers} requests as fast as possible without waiting for the replies. The first three generate 150\,000--180\,000 packets per second when nothing filters them; the Modbus flood is not volumetric (about 5\,400 TCP segments per second, each with several valid requests).
 
 \subsection{Experimental Procedure}
-The experimental procedure follows the evaluation methodologies proposed by Fraunholz et al. \cite{fraunholz2018industrial} and Mansfield et al. \cite{mansfield2020threeTier} for industrial intrusion detection and prevention systems.
+Algorithm~\ref{alg:run} summarizes one run. The scripts that implement it, the raw output of every run, and the analysis scripts are in the project repository (see Data and Code Availability).
 
-The experiments are conducted in a controlled industrial network environment composed of:
-\begin{itemize}
-    \item PLC devices,
-    \item SCADA/HMI systems,
-    \item industrial switches,
-    \item an inline IPS,
-    \item an attacker workstation,
-    \item monitoring and traffic analysis tools.
-\end{itemize}
-
-The experimental methodology is divided into five phases.
-
-\subsubsection{Phase 1 -- Environment Setup}
-
-The first phase consists of configuring the industrial environment and communication infrastructure.
-
-The following components are deployed:
-\begin{itemize}
-    \item PLC simulation or physical PLC,
-    \item SCADA monitoring software,
-    \item industrial Ethernet switch,
-    \item Suricata IPS,
-    \item Wireshark traffic analyzer,
-    \item Kali Linux attacker machine.
-\end{itemize}
-
-According to Ahmed et al. \cite{ahmed2019survey}, realistic industrial testbeds are essential for evaluating the effectiveness of security mechanisms in ICS environments.
-
-\subsubsection{Phase 2 -- Baseline Traffic Capture}
-
-Normal industrial communication traffic is captured before launching attacks.
-
-The objective of this phase is to establish baseline operational behavior for:
-\begin{itemize}
-    \item Modbus/TCP communication,
-    \item SCADA--PLC interaction,
-    \item network latency,
-    \item packet delivery rate.
-\end{itemize}
-
-Traffic analysis is performed using Wireshark and IPS monitoring logs.
-
-\subsubsection{Phase 3 -- Attack Execution}
-
-During this phase, the attack scenarios described in Section 4.4 are executed against the industrial network.
-
-The generated attacks include:
-\begin{itemize}
-    \item TCP SYN Flood,
-    \item ICMP Flood,
-    \item Modbus/TCP Flood.
-\end{itemize}
-
-The attacks are generated from the attacker workstation connected to the OT network.
-
-\subsubsection{Phase 4 -- IPS Activation}
-
-The IPS is activated in inline mode with predefined detection and mitigation rules.
-
-According to Fraunholz et al. \cite{fraunholz2018industrial}, reactive IPS mechanisms allow real-time mitigation of malicious traffic before it reaches industrial devices.
-
-The IPS performs:
-\begin{itemize}
-    \item traffic inspection,
-    \item malicious packet filtering,
-    \item automatic alert generation,
-    \item attack blocking.
-\end{itemize}
-
-\subsubsection{Phase 5 -- Performance Evaluation}
-
-The final phase evaluates the effectiveness of the proposed architecture based on the collected metrics.
-
-The evaluation focuses on:
-\begin{itemize}
-    \item IPS detection accuracy,
-    \item false positive rate,
-    \item reduction of malicious traffic,
-    \item PLC availability,
-    \item network latency,
-    \item industrial communication stability.
-\end{itemize}
-
-According to Mansfield et al. \cite{mansfield2020threeTier}, performance analysis is essential to determine whether security mechanisms introduce operational overhead in industrial control environments.
+\begin{algorithm}[H]
+\caption{One experimental run (condition $c$, attack $a$).}\label{alg:run}
+\begin{algorithmic}[1]
+\footnotesize
+\State wait until the guard state is OK or WARN and the host temperature is below its limit
+\State set the IPS mode of condition $c$ (router, alert, or drop); restart the PLC runtime
+\State start the captures on both mirror ports, the SCADA client (10 Hz), and the host and PLC samplers
+\State wait 15~s (warm-up)
+\State run attack $a$ for 60~s (none for E0)
+\State wait 15~s (cool-down); stop the SCADA client and the captures
+\State collect counters (nftables, NFQUEUE, Suricata) and the PLC state
+\State compute the metrics from the raw files and validate the run; append the result to the run table
+\end{algorithmic}
+\end{algorithm}
