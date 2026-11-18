@@ -3,9 +3,8 @@ All results come from 130 runs (10 per combination) measured on the platform des
 
 \begin{table*}[t]
 \caption{Results by condition and attack (mean $\pm$ 95\,\% CI, $n=10$ runs per row). Replies/issued is $A_{iss}$ and Replies/sched.\ is $A_{sch}$; Removed is the percentage of attack packets that do not reach the PLC network; PLC down is the number of runs in which the PLC runtime had stopped after the attack.}\label{tab:results}
-\centering\scriptsize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\textwidth}{!}{\input{tables/t_results.tex}}
+\centering\small
+\begin{adjustbox}{max width=\textwidth}\input{tables/t_results.tex}\end{adjustbox}
 \end{table*}
 
 \subsection{Service Availability}
@@ -59,7 +58,7 @@ Table~\ref{tab:tests} gives the effect sizes and the significance of the compari
 \begin{table}[t]
 \caption{Cliff's $\delta$ for the first condition of each pair, replies/scheduled. Significance after Holm's correction: ns, not significant; $*$, $p<0.05$; $**$, $p<0.01$; $***$, $p<0.001$. Last row: $p$ values of Fisher's exact test for the PLC crashes.}\label{tab:tests}
 \centering\footnotesize
-\resizebox{\columnwidth}{!}{\input{tables/t_tests.tex}}
+\input{tables/t_tests.tex}
 \end{table}
 
 \subsection{Modbus/TCP Flood and PLC Crash}\label{sec:modbus}

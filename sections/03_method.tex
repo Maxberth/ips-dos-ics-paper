@@ -5,18 +5,18 @@ This research followed an applied, quantitative, and experimental approach. A vi
 The experiment is a full factorial design with two factors: the network condition (four levels) and the attack (four levels, plus a no-attack baseline). Table~\ref{tab:conditions} lists the conditions. The condition E1 contains the firewall and the VLAN segmentation but no IPS, so that the effect of the IPS (E2 and E3) can be separated from that of the other controls. The conditions E2 and E3 use the same Suricata process, the same rules, and the same data path, and differ only in the action of the rules (\texttt{alert} or \texttt{drop}).
 
 \begin{table}[t]
-\caption{Experimental conditions and attacks. Each combination was run 10 times (130 runs in total).}\label{tab:conditions}
+\caption{Experimental conditions. All conditions include the firewall and the VLANs; the IPS is Suricata inline between VLAN 20 and VLAN 30. Each combination was run 10 times (130 runs in total).}\label{tab:conditions}
 \centering\footnotesize
-\resizebox{\columnwidth}{!}{\begin{tabular}{lll}
+\begin{tabular}{lll}
 \toprule
-Condition & Network between VLAN 20 and VLAN 30 & Attacks\\
+Condition & IPS & Attacks\\
 \midrule
-E0 & Firewall and VLANs, no IPS & none (baseline)\\
-E1 & Firewall and VLANs, no IPS & SYN, UDP, ICMP, Modbus/TCP\\
-E2 & E1 + Suricata inline, action \texttt{alert} & SYN, UDP, ICMP, Modbus/TCP\\
-E3 & E1 + Suricata inline, action \texttt{drop} & SYN, UDP, ICMP, Modbus/TCP\\
+E0 & none & none (baseline)\\
+E1 & none & SYN, UDP, ICMP, Modbus\\
+E2 & action \texttt{alert} & SYN, UDP, ICMP, Modbus\\
+E3 & action \texttt{drop} & SYN, UDP, ICMP, Modbus\\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 Each run has three phases (Fig.~\ref{fig:design}): a warm-up of 15~s with legitimate traffic only, an attack of 60~s, and a cool-down of 15~s. The runs were executed in five blocks (by group of attacks and condition); within each block the order of the runs was randomized with a fixed seed (2027) to limit ordering effects. A guard process pauses or aborts the experiment when the host memory, swap, or temperature exceeds fixed limits. Before each run the PLC runtime is restarted so that every run starts with a healthy PLC.
