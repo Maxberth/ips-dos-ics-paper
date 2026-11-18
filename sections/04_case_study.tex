@@ -48,14 +48,17 @@ drop tcp any any -> 192.168.30.10 502
   (msg:"LAB SYN flood"; flags:S,12;
   detection_filter:track by_src,
   count 100, seconds 1; sid:1000001;)
+
 drop udp any any -> 192.168.30.10 any
   (msg:"LAB UDP flood";
   detection_filter:track by_src,
   count 100, seconds 1; sid:1000002;)
+
 drop icmp any any -> 192.168.30.10 any
   (msg:"LAB ICMP echo flood"; itype:8;
   detection_filter:track by_src,
   count 50, seconds 1; sid:1000003;)
+
 drop tcp any any -> 192.168.30.10 502
   (msg:"LAB Modbus/TCP flood";
   flow:to_server,established; dsize:>0;
