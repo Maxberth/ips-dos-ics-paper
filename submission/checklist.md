@@ -7,10 +7,10 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 ## Contenido del paper
 
 - [x] Observaciones críticas resueltas (ver `../observaciones/registro_cambios.md`): 1, 2, 5, 11.
-- [x] Título y abstract alineados con lo que se midió (obs. 4, 25). **Confirmar el cambio de título con la conferencia.**
+- [x] Título y abstract alineados con lo que se midió (obs. 4, 25). El título aceptado se mantiene; el alcance se declara en el abstract, §3 y §6.
 - [ ] Revisión de inglés y tiempos verbales (obs. 12, 13).
 - [ ] Entradas `% VERIFICAR DOI` y `% VERIFICAR AUTOR` de `references.bib` resueltas.
-- [ ] Extensión dentro del límite de páginas de la conferencia (hoy: 17 páginas con referencias).
+- [x] Extensión dentro del límite de páginas de la conferencia (12 páginas con referencias; el límite de ICITS'27 en inglés es 12).
 
 ## Formato LNCS
 

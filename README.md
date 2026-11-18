@@ -1,6 +1,6 @@
 # IPS contra DoS en redes de control industrial: paper ICITS'27
 
-Fuente LaTeX del artículo *Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC Protection and VLAN Segmentation*, aceptado como Full Paper en ICITS'27 (submission 418).
+Fuente LaTeX del artículo *Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection*, aceptado como Full Paper en ICITS'27 (submission 418).
 La versión camera-ready usa la plantilla Springer LNCS (`llncs`, bibliografía `splncs04`).
 
 Repositorio privado. Los datos, scripts y figuras de resultados salen del laboratorio: [`Maxberth/ips-dos-ics-lab`](https://github.com/Maxberth/ips-dos-ics-lab).
@@ -52,5 +52,5 @@ Cuando una figura o tabla del laboratorio entre al paper, se copia a `figures/` 
 ## Estado
 
 - Plantilla LNCS: hecha. Compila sin errores ni referencias indefinidas, con todas las fuentes embebidas.
-- Extensión: **17 páginas** en LNCS con referencias (antes 26). Hay que confirmar el límite de páginas de ICITS'27 y, si es menor, quitar las Figs. 2 y 3 (arquitectura detallada) o la Tabla 4.
-- Observaciones: todas las que tienen datos del laboratorio están incorporadas al manuscrito (ver `observaciones/registro_cambios.md`); parciales: 9, 13, 14. Pendiente: confirmar el título, publicar los repositorios y la revisión de inglés.
+- Extensión: **12 páginas** en LNCS con referencias, que es el límite de ICITS'27 para artículos en inglés (la versión inicial tenía 26).
+- Observaciones: todas las que tienen datos del laboratorio están incorporadas al manuscrito (ver `observaciones/registro_cambios.md`); parciales: 9, 13, 14. Pendiente: publicar los repositorios y la revisión de inglés.

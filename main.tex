@@ -11,10 +11,11 @@
 \usepackage{algpseudocode}
 
 \graphicspath{{figures/}}
+\raggedbottom
 
 \begin{document}
 
-\title{Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC Protection and VLAN Segmentation}
+\title{Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection}
 \titlerunning{IPS for DoS Mitigation in ICS}
 
 \author{Manuel Oswaldo Juarez Mayo \and
@@ -31,7 +32,7 @@ Jesús Moises Martin Villar Castillo}
 
 \begin{abstract}
 Industrial Control Systems (ICS) are increasingly exposed to cyberattacks because operational technology is connected to IP networks, and denial-of-service (DoS) attacks threaten the availability of Programmable Logic Controllers (PLCs).
-This paper presents an inline Intrusion Prevention System (IPS) architecture built with free software (QEMU/KVM, Open vSwitch, nftables, Suricata, and OpenPLC) and evaluates it in a reproducible virtual testbed.
+This paper presents an inline Intrusion Prevention System (IPS) architecture that protects a PLC behind a VLAN-segmented virtual industrial switch, built with free software (QEMU/KVM, Open vSwitch, nftables, Suricata, and OpenPLC), and evaluates it in a reproducible virtual testbed; the evaluation measures the availability of the PLC service, not the performance of switch hardware.
 Four conditions (no attack; firewall and VLANs only; Suricata in alert mode; Suricata in drop mode) are compared under SYN, UDP, ICMP, and Modbus/TCP floods, with 10 repetitions per combination (130 runs), confidence intervals, and non-parametric tests.
 The IPS in drop mode removed 99.7--100\,\% of the volumetric attack packets before the PLC network, but the legitimate SCADA client received valid replies to only 42--49\,\% of its scheduled requests, because the IPS machine became the bottleneck.
 The Modbus/TCP flood stopped the PLC runtime in most runs, and a rate-based rule produced false positives on the legitimate client.
