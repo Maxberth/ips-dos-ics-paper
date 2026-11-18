@@ -1,28 +1,104 @@
 \section{Architecture and Experimental Setup}\label{sec:case-study}
 \subsection{Proposed Architecture}
-The architecture follows a hierarchical industrial design inspired by the Purdue model and by the reactive IPS concept of Fraunholz et al.\ \cite{fraunholz2018industrial}: a firewall separates the corporate network from the operational network, and an inline IPS between the SCADA layer and the PLC network inspects and filters traffic in real time (Fig.~\ref{fig:logical}). All segments are 802.1Q VLANs on one virtual industrial switch implemented with Open vSwitch, which has no physical ports: VLAN 10 (corporate, attacker), VLAN 20 (DMZ with the SCADA client), and VLAN 30 (PLC network), plus a management VLAN. A verification script run during the setup confirmed the segmentation: hosts of VLAN 10 cannot reach hosts of VLAN 20, and hosts of VLAN 20 cannot reach hosts of VLAN 30, at layer 2, and the management VLAN is unreachable from VLAN 10. The five virtual machines are the attacker (VLAN 10; 2 vCPU, 1.25~GiB of RAM), the firewall with nftables (VLAN 10/20; 1 vCPU, 0.5~GiB), the SCADA client (VLAN 20; 1 vCPU, 0.75~GiB), the IPS with Suricata (VLAN 20/30; 2 vCPU, 1.5~GiB), and the PLC with OpenPLC (VLAN 30; 1 vCPU, 0.75~GiB).
+The architecture follows a hierarchical industrial design inspired by the Purdue model and by the reactive IPS concept of Fraunholz et al.\ \cite{fraunholz2018industrial}. It separates the corporate network from the operational network with a firewall and VLAN segmentation, and it places an inline IPS between the SCADA layer and the PLC network to inspect and filter traffic in real time (Fig.~\ref{fig:logical}). All segments are 802.1Q VLANs on a single virtual industrial switch implemented with Open vSwitch, which has no physical ports. The corporate network is VLAN 10 (192.168.10.0/24), the DMZ with the SCADA client is VLAN 20 (192.168.20.0/24), and the PLC network is VLAN 30 (192.168.30.0/24); Table~\ref{tab:config} lists the machines and their VLANs.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.85\columnwidth]{a0_logical_topology.pdf}
-\caption{Proposed industrial network topology: the corporate network (where the attacker is), the DMZ with the SCADA client, and the PLC network, separated by a firewall and an inline IPS.}\label{fig:logical}
+\includegraphics[width=\columnwidth]{a0_logical_topology.pdf}
+\caption{Proposed industrial network topology: the corporate network (where the attacker is located), the DMZ with the SCADA client, and the PLC network, separated by a firewall and an inline IPS.}\label{fig:logical}
 \end{figure}
 
-Everything runs on one physical laptop (Ryzen 5 6600H, 6 cores and 12 threads, 14.8~GiB of RAM, Linux with KVM), the only platform of the study, with each virtual CPU pinned to a host thread. The traffic is measured out of band: two mirror ports capture the VLAN 20 side (before the IPS) and the VLAN 30 side (after it), and no experimental packet passes through the capture.
+\subsection{Testbed}
+Everything runs on one physical laptop (Ryzen 5 6600H, 6 cores and 12 threads, 14.8~GiB of RAM, Linux host with KVM) that is the only platform of the study. Figure~\ref{fig:testbed} shows the virtual machines and the measurement points, and Table~\ref{tab:config} their roles and resources. Each virtual CPU is pinned to a host thread. The traffic is measured out of band: two mirror ports capture the traffic on the VLAN 20 side (before the IPS) and on the VLAN 30 side (after the IPS), and no packet of the experiment passes through the capture.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{a1_topology.pdf}
+\caption{Testbed: virtual machines, virtual switch, and measurement points.}\label{fig:testbed}
+\end{figure*}
+
+\begin{table*}[t]
+\caption{Virtual machines of the testbed, their VLANs, and their resources.}\label{tab:config}
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{tables/t_config.tex}
+\end{table*}
+
+Table~\ref{tab:versions} lists the software versions, which are also recorded with every run.
+
+\begin{table}[t]
+\caption{Software versions of the testbed.}\label{tab:versions}
+\centering\footnotesize
+\input{tables/t_versions.tex}
+\end{table}
 
 \subsection{IPS Configuration}
-In E2 and E3 all packets forwarded between VLAN 20 and VLAN 30, in both directions, go through two \texttt{NFQUEUE} queues (one per virtual CPU of the IPS), and Suricata returns the verdict; the queue has no bypass, so if Suricata does not read it the traffic is cut. The default exception policy and the TCP stream validation of Suricata were disabled because, with the defaults, the engine dropped traffic without any rule matching, which would mix the effect of the rules with that of the engine. In E1 the same route is used without the queue. There is one rule per attack, each counting the packets of one source per second: 100 packets for SYN and UDP, 50 for ICMP, and 20 segments with data for Modbus/TCP. The Modbus rule in E3 is:
+In the conditions E2 and E3 all packets forwarded between VLAN 20 and VLAN 30, in both directions, are sent to two \texttt{NFQUEUE} queues (one per virtual CPU of the IPS, with the load shared by flow hash), and Suricata returns the verdict (Fig.~\ref{fig:datapath}). The queue has no bypass: if Suricata does not read it, the traffic is cut (fail-closed). The default exception policy of Suricata and the TCP stream validation were disabled, because with the defaults the engine dropped traffic without any rule matching, which would have mixed the effect of the rules with that of the engine. In E1 the same route is used without the queue, so that only the action changes between conditions.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{a2_ips_datapath.pdf}
+\caption{Data path of the inline IPS. Replies of the PLC travel through the same queues.}\label{fig:datapath}
+\end{figure*}
+
+The blocking rules of condition E3 are shown below (abbreviated); in E2 the same rules use the \texttt{alert} action. Each rule counts the packets of one source per second; the thresholds are 100 packets for SYN and UDP, 50 for ICMP, and 20 segments with data for Modbus/TCP.
 {\scriptsize
 \begin{verbatim}
+drop tcp any any -> 192.168.30.10 502
+  (msg:"LAB SYN flood"; flags:S,12;
+  detection_filter:track by_src,
+  count 100, seconds 1; sid:1000001;)
+drop udp any any -> 192.168.30.10 any
+  (msg:"LAB UDP flood";
+  detection_filter:track by_src,
+  count 100, seconds 1; sid:1000002;)
+drop icmp any any -> 192.168.30.10 any
+  (msg:"LAB ICMP echo flood"; itype:8;
+  detection_filter:track by_src,
+  count 50, seconds 1; sid:1000003;)
 drop tcp any any -> 192.168.30.10 502
   (msg:"LAB Modbus/TCP flood";
   flow:to_server,established; dsize:>0;
   detection_filter:track by_src,
-    count 20, seconds 1; sid:1000004;)
+  count 20, seconds 1; sid:1000004;)
 \end{verbatim}}
-In E2 the same rules use the \texttt{alert} action.
 
-\subsection{Attack Scenarios and Procedure}
-All attacks come from one address in VLAN 10, target the PLC at 192.168.30.10, and never leave the host: a TCP SYN flood (\texttt{hping3 -S -p 502 -{}-flood}), a UDP flood (\texttt{hping3 -{}-udp -p 502 -{}-flood}), an ICMP flood (\texttt{hping3 -{}-icmp -{}-flood}), and a Modbus/TCP flood, a Python script that opens 8 TCP connections and sends valid \texttt{Read Holding Registers} requests as fast as possible without waiting for the replies. The first three generate 150\,000--180\,000 packets per second when nothing filters them; the Modbus flood is not volumetric (about 5\,400 TCP segments per second, each with several valid requests).
+\subsection{Attack Scenarios}
+All attacks come from one address in VLAN 10, target the PLC at 192.168.30.10, and never leave the host:
+\begin{itemize}\setlength\itemsep{0pt}
+    \item TCP SYN flood: \texttt{hping3 -S -p 502 -{}-flood};
+    \item UDP flood: \texttt{hping3 -{}-udp -p 502 -{}-flood};
+    \item ICMP flood: \texttt{hping3 -{}-icmp -{}-flood};
+    \item Modbus/TCP flood: a Python script that opens 8 TCP connections and sends valid \emph{Read Holding Registers} requests as fast as possible, without waiting for the replies.
+\end{itemize}
+The first three generate 150\,000--180\,000 packets per second when nothing filters them (Table~\ref{tab:attack}). The Modbus flood is not volumetric: it sends about 5\,400 TCP segments per second, each carrying several valid requests, and in E3 the rule cuts it to a few dozen packets per second.
 
-One run proceeds as follows: wait until the guard state and the host temperature are acceptable; set the mode of the condition (router, alert, or drop) and restart the PLC; start the captures, the SCADA client, and the samplers; wait 15~s; attack for 60~s; wait 15~s; stop the processes, collect the counters (nftables, NFQUEUE, Suricata) and the PLC state; compute the metrics from the raw files, validate the run, and append it to the run table.
+\begin{table}[t]
+\caption{Attack rate measured on the attacker interface of the host (thousands of packets per second, mean $\pm$ 95\,\% CI, $n=10$).}\label{tab:attack}
+\centering\footnotesize
+\input{tables/t_attack.tex}
+\end{table}
+
+\subsection{Experimental Procedure}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{a3_experiment_design.pdf}
+\caption{Run structure (top) and experimental design (bottom): each cell is 10 runs.}\label{fig:design}
+\end{figure*}
+
+Algorithm~\ref{alg:run} summarizes one run. Every run stores the request log of the SCADA client, the per-second packet counts of both mirrors, the counters of nftables, NFQUEUE, and Suricata before and after the run, the CPU time of the machines, the output of the attack tool, and the state of the PLC; a validation script checks that these files are complete and flags runs with anomalies, such as an attacker that transmitted almost nothing. The scripts that implement it, the raw output of every run, and the analysis scripts are in the project repository (see Data and Code Availability).
+
+\begin{algorithm}[t]
+\caption{One experimental run (condition $c$, attack $a$).}\label{alg:run}
+\begin{algorithmic}[1]
+\footnotesize
+\State wait until the guard state is OK or WARN and the host temperature is below its limit
+\State set the IPS mode of condition $c$ (router, alert, or drop); restart the PLC runtime
+\State start the captures on both mirror ports, the SCADA client (10 Hz), and the host and PLC samplers
+\State wait 15~s (warm-up)
+\State run attack $a$ for 60~s (none for E0)
+\State wait 15~s (cool-down); stop the SCADA client and the captures
+\State collect counters (nftables, NFQUEUE, Suricata) and the PLC state
+\State compute the metrics from the raw files and validate the run; append the result to the run table
+\end{algorithmic}
+\end{algorithm}

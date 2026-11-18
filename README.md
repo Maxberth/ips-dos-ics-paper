@@ -1,7 +1,7 @@
 # IPS contra DoS en redes de control industrial: paper ICITS'27
 
 Fuente LaTeX del artículo *Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection*, aceptado como Full Paper en ICITS'27 (submission 418).
-La versión camera-ready usa la plantilla Springer LNCS (`llncs`, bibliografía `splncs04`).
+La rama `main` usa el formato original de la versión enviada (`acmart`, dos columnas) con las correcciones de las guías de Springer (letra de figuras ≥ 6 pt, pie de figura debajo y de tabla encima, encabezados con mayúsculas y solo dos niveles numerados, ecuaciones numeradas, autor de correspondencia marcado). La rama `respaldo-main` conserva la versión en formato Springer `llncs` (una columna, 12 páginas) como respaldo.
 
 Repositorio privado. Los datos, scripts y figuras de resultados salen del laboratorio: [`Maxberth/ips-dos-ics-lab`](https://github.com/Maxberth/ips-dos-ics-lab).
 
@@ -25,7 +25,7 @@ main.tex            Preámbulo LNCS, título, autores, abstract, keywords y \inp
 sections/           Una sección por archivo (01_introduction … 06_conclusions)
 figures/            Imágenes usadas por el paper (mapa de nombres en figures/README.md)
 references.bib      Bibliografía
-llncs.cls           Clase Springer LNCS v2.26 (2025-02-25)
+llncs.cls           Clase Springer LNCS v2.26 (solo la usa la rama respaldo-main)
 splncs04.bst        Estilo de bibliografía de Springer
 latexmkrc, Makefile Compilación
 actual/             Versión enviada con acmart, intacta (ver actual/PROCEDENCIA.md)
@@ -52,5 +52,5 @@ Cuando una figura o tabla del laboratorio entre al paper, se copia a `figures/` 
 ## Estado
 
 - Plantilla LNCS: hecha. Compila sin errores ni referencias indefinidas, con todas las fuentes embebidas.
-- Extensión: **12 páginas** en LNCS con referencias, que es el límite de ICITS'27 para artículos en inglés (la versión inicial tenía 26).
+- Extensión: **12 páginas** en `acmart` de dos columnas (límite de ICITS'27 para inglés: 12). La versión `llncs` de `respaldo-main` también ocupa 12.
 - Observaciones: todas las que tienen datos del laboratorio están incorporadas al manuscrito (ver `observaciones/registro_cambios.md`); parciales: 9, 13, 14. Pendiente: publicar los repositorios y la revisión de inglés.
