@@ -4,7 +4,7 @@ The architecture follows a hierarchical industrial design inspired by the Purdue
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{a0_logical_topology.pdf}
+\includegraphics[width=0.85\columnwidth]{a0_logical_topology.pdf}
 \caption{Proposed industrial network topology: the corporate network (where the attacker is), the DMZ with the SCADA client, and the PLC network, separated by a firewall and an inline IPS.}\label{fig:logical}
 \end{figure}
 
@@ -14,9 +14,11 @@ Everything runs on one physical laptop (Ryzen 5 6600H, 6 cores and 12 threads, 1
 In E2 and E3 all packets forwarded between VLAN 20 and VLAN 30, in both directions, go through two \texttt{NFQUEUE} queues (one per virtual CPU of the IPS), and Suricata returns the verdict; the queue has no bypass, so if Suricata does not read it the traffic is cut. The default exception policy and the TCP stream validation of Suricata were disabled because, with the defaults, the engine dropped traffic without any rule matching, which would mix the effect of the rules with that of the engine. In E1 the same route is used without the queue. There is one rule per attack, each counting the packets of one source per second: 100 packets for SYN and UDP, 50 for ICMP, and 20 segments with data for Modbus/TCP. The Modbus rule in E3 is:
 {\scriptsize
 \begin{verbatim}
-drop tcp any any -> 192.168.30.10 502 (msg:"LAB Modbus/TCP flood";
+drop tcp any any -> 192.168.30.10 502
+  (msg:"LAB Modbus/TCP flood";
   flow:to_server,established; dsize:>0;
-  detection_filter:track by_src, count 20, seconds 1; sid:1000004;)
+  detection_filter:track by_src,
+    count 20, seconds 1; sid:1000004;)
 \end{verbatim}}
 In E2 the same rules use the \texttt{alert} action.
 

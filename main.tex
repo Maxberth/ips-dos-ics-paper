@@ -1,35 +1,56 @@
-\documentclass[runningheads]{llncs}
+% Formato original (acmart, sigconf) con las correcciones de Springer aplicables:
+% título y encabezados con mayúsculas, pie de figura debajo y de tabla encima, resumen sin notas al pie,
+% figuras vectoriales con letra >= 6 pt, ecuaciones numeradas, nombres completos y autor de correspondencia marcado.
+\documentclass[sigconf]{acmart}
 
-\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb}
+\let\Bbbk\relax
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
-\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{xcolor}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{booktabs}
 \usepackage{url}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-
 \graphicspath{{figures/}}
-\raggedbottom
+
+\captionsetup[figure]{labelformat=simple, labelsep=period, name=Fig., labelfont=bf}
+
+% Sin bloque de derechos ni referencia ACM: no aplican a este artículo
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\acmConference[ICITS'27]{ICITS'27}{2027}{}
+\acmYear{2026}
+\copyrightyear{2026}
+\AtBeginDocument{\fancyhf{}\fancyhead[LE]{\footnotesize\shortauthors}\fancyhead[RO]{\footnotesize IPS for DoS Mitigation in ICS}\fancyfoot[CE,CO]{\footnotesize\thepage}}
 
 \begin{document}
+\renewcommand{\abstractname}{Abstract}
 
-\title{Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection}
-\titlerunning{IPS for DoS Mitigation in ICS}
+\title[IPS for DoS Mitigation in ICS]{Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection}
 
-\author{Alberth Jesus Vigo Saldaña\textsuperscript{*} \and
-Manuel Oswaldo Juarez Mayo \and
-Jose Alfredo Valdez Reyes \and
-Javier Eduardo Villegas Vidal \and
-Jesús Moises Martin Villar Castillo}
-\authorrunning{A. J. Vigo Saldaña et al.}
+\author[ ]{Alberth Jesus Vigo Saldaña}
+\authornote{Corresponding author.}
+\affiliation{\institution{Universidad Nacional de Trujillo}\city{Trujillo}\country{Peru}}
+\email{t1052702321@unitru.edu.pe}
 
-\institute{Universidad Nacional de Trujillo, Trujillo, Peru\\
-\email{\{t1052702321,t1022701121,t1022700221,t1512700721,t052700420\}@unitru.edu.pe}\\
-\textsuperscript{*} Corresponding author: t1052702321@unitru.edu.pe}
+\author[ ]{Manuel Oswaldo Juarez Mayo}
+\affiliation{\institution{Universidad Nacional de Trujillo}\city{Trujillo}\country{Peru}}
+\email{t1022701121@unitru.edu.pe}
 
-\maketitle
+\author[ ]{Jose Alfredo Valdez Reyes}
+\affiliation{\institution{Universidad Nacional de Trujillo}\city{Trujillo}\country{Peru}}
+\email{t1022700221@unitru.edu.pe}
+
+\author[ ]{Javier Eduardo Villegas Vidal}
+\affiliation{\institution{Universidad Nacional de Trujillo}\city{Trujillo}\country{Peru}}
+\email{t1512700721@unitru.edu.pe}
+
+\author[Vigo Saldaña et al.]{Jesús Moises Martin Villar Castillo}
+\affiliation{\institution{Universidad Nacional de Trujillo}\city{Trujillo}\country{Peru}}
+\email{t052700420@unitru.edu.pe}
 
 \begin{abstract}
 Industrial Control Systems (ICS) are increasingly exposed to cyberattacks because operational technology is connected to IP networks, and denial-of-service (DoS) attacks threaten the availability of Programmable Logic Controllers (PLCs).
@@ -38,8 +59,10 @@ Four conditions (no attack; firewall and VLANs only; Suricata in alert mode; Sur
 The IPS in drop mode removed 99.7--100\,\% of the volumetric attack packets before the PLC network, but the legitimate SCADA client received valid replies to only 42--49\,\% of its scheduled requests, because the IPS machine became the bottleneck.
 The Modbus/TCP flood stopped the PLC runtime in most runs, and a rate-based rule produced false positives on the legitimate client.
 Code and raw data are available online.
-\keywords{Industrial Control Systems \and Intrusion Prevention System \and DoS Mitigation \and PLC Protection \and SCADA Networks \and Cybersecurity}
 \end{abstract}
+\keywords{Industrial Control Systems, Intrusion Prevention System, DoS Mitigation, PLC Protection, SCADA Networks, Cybersecurity}
+
+\maketitle
 
 \input{sections/01_introduction}
 \input{sections/02_background}
@@ -48,7 +71,7 @@ Code and raw data are available online.
 \input{sections/05_results}
 \input{sections/06_conclusions}
 
-\bibliographystyle{splncs04}
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
 \end{document}

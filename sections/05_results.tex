@@ -1,29 +1,29 @@
 \section{Results and Discussion}\label{sec:results}
 All results come from 130 runs (10 per combination) on the platform of Section~\ref{sec:case-study}; values are means with 95\,\% confidence intervals unless stated otherwise (Table~\ref{tab:results}).
 
-\begin{table}[H]
+\begin{table*}[t]
 \caption{Results by condition and attack (mean $\pm$ 95\,\% CI, $n=10$). Replies/issued is $A_{iss}$, replies/sched.\ is $A_{sch}$; Removed is the share of attack packets that do not reach the PLC network; PLC down is the number of runs with the PLC runtime stopped after the attack.}\label{tab:results}
 \centering\scriptsize
 \setlength{\tabcolsep}{3pt}
 \input{tables/t_results.tex}
-\end{table}
+\end{table*}
 
 \subsection{Availability and Latency}
 The baseline E0 gives 100\,\% of valid replies and an RTT p95 of 0.86~ms. Without the IPS (E1), the SYN, UDP, and ICMP floods leave the PLC answering almost every request ($A_{iss}\geq 99.2\,\%$), although they reach it at 150\,000--180\,000 packets per second (Fig.~\ref{fig:avail}). With the IPS in alert mode (E2) the service degrades sharply ($A_{iss}$ of 3.4\,\%, 66.7\,\%, and 49.1\,\% for SYN, UDP, and ICMP) and varies a great deal between runs; in drop mode (E3) $A_{iss}$ is 73--77\,\% for the three floods. The closed-loop client issues fewer requests when replies are missing (119 of the 600 scheduled in E2 with SYN), and measured against the scheduled requests the service in E3 is 42--49\,\%; both quantities are reported because $A_{iss}$ alone overstates the service. The RTT p95 of the replies that arrive rises from 0.86~ms to 4.3--260~ms in E1 and 200--390~ms with the IPS.
 
-\begin{figure}[tbp]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{r1_availability.pdf}
+\includegraphics[width=0.8\textwidth]{r1_availability.pdf}
 \caption{Availability during the 60~s attack: (a) valid replies divided by requests issued; (b) divided by requests scheduled (10~Hz $\times$ 60~s). Each marker is one run, the black bar is the mean, and the dashed line is the baseline E0.}\label{fig:avail}
-\end{figure}
+\end{figure*}
 
 Per second (Fig.~\ref{fig:series}), the service falls when the attack starts and recovers when it ends, except in E3, which stays at about 92\,\% in the 10~s after the attack (Section~\ref{sec:fp}). The Modbus flood does not affect the replies during the attack, but the PLC stops answering when it ends (Section~\ref{sec:modbus}).
 
-\begin{figure}[tbp]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{r3_availability_timeseries.pdf}
+\includegraphics[width=0.8\textwidth]{r3_availability_timeseries.pdf}
 \caption{Valid replies per second averaged over the 10 runs of each combination; the shaded band is the attack window.}\label{fig:series}
-\end{figure}
+\end{figure*}
 
 \subsection{Attack Traffic Removed and Resource Use}
 In E3 the rules remove 99.7--100\,\% of the SYN, UDP, and ICMP floods (Table~\ref{tab:results}). In E2 no packet is dropped by a rule (Suricata reported zero blocked packets), so the 54--69\,\% that disappears is due to the overflow of the \texttt{NFQUEUE}: the IPS cannot process the flood. In E1 only 0--2\,\% disappears, attributed to the packets the capture discards. The counts are consistent across sources: in every run of E2 and E3 the packets entering the queues (nftables counters, both directions) equal the packets dropped by the queue plus the verdicts of Suricata (ratio 1.000; 0.998--1.006 in the Modbus runs of E3).
