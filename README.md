@@ -52,3 +52,8 @@ version_inicial/    Primera versión enviada (acmart), intacta. NO es el LaTeX v
 - Versión final del artículo en `main`, 12 páginas, sin referencias sin resolver y con las fuentes embebidas.
 - Las observaciones con datos del laboratorio están incorporadas (ver `observaciones/registro_cambios.md`); parciales: 9, 13 y 14.
 - Pendiente: revisión de inglés por una persona y los trámites de la conferencia (formulario de licencia firmado e inscripción).
+
+## Licencia
+
+El texto, las figuras y las tablas del artículo quedan sujetos al acuerdo de publicación con la editorial (Springer), por lo que este repositorio **no** concede una licencia abierta sobre ellos: todos los derechos reservados hasta su publicación. Los datos, scripts y las versiones generadoras de figuras y tablas están en el laboratorio, con licencia MIT (código) y CC BY 4.0 (datos y documentación).
+
