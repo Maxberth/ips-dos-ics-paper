@@ -6,11 +6,11 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 
 ## Contenido del paper
 
-- [ ] Observaciones críticas resueltas o con su afirmación rebajada en el texto (ver `../observaciones/registro_cambios.md`): 1, 2, 5, 11.
-- [ ] Título y abstract alineados con lo que se midió (obs. 4, 25).
+- [x] Observaciones críticas resueltas (ver `../observaciones/registro_cambios.md`): 1, 2, 5, 11.
+- [x] Título y abstract alineados con lo que se midió (obs. 4, 25). **Confirmar el cambio de título con la conferencia.**
 - [ ] Revisión de inglés y tiempos verbales (obs. 12, 13).
 - [ ] Entradas `% VERIFICAR DOI` y `% VERIFICAR AUTOR` de `references.bib` resueltas.
-- [ ] Extensión dentro del límite de páginas de la conferencia (hoy: 26 páginas).
+- [ ] Extensión dentro del límite de páginas de la conferencia (hoy: 17 páginas con referencias).
 
 ## Formato LNCS
 
@@ -22,8 +22,8 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 - [ ] Ciudad y país de la afiliación confirmados (hoy: «Trujillo, Peru»).
 - [x] Compila sin errores ni referencias indefinidas.
 - [x] Todas las fuentes embebidas en el PDF (`pdffonts main.pdf`).
-- [ ] Figuras legibles impresas en blanco y negro y con resolución suficiente (≥ 300 dpi en fotos y capturas).
-- [ ] Sin `Overfull \hbox` visibles en el PDF (hoy quedan seis de menos de 10 pt).
+- [x] Figuras vectoriales (PDF) generadas por script, legibles al ancho de LNCS y con marcadores distintos por escenario.
+- [ ] Sin `Overfull \hbox` visibles en el PDF (hoy quedan pocos de menos de 10 pt).
 
 ## Archivos a subir
 
@@ -38,3 +38,6 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 
 - [ ] Etiqueta en Git del estado entregado: `git tag -a v1-camera-ready -m "Versión entregada"` y `git push origin v1-camera-ready`.
 - [ ] Guardar aquí el correo de confirmación de la plataforma, sin datos personales.
+
+- [ ] **Hacer públicos los repositorios `ips-dos-ics-lab` y `ips-dos-ics-paper` antes de subir** (el abstract y la sección de disponibilidad los citan).
+- [ ] Revisión de inglés por una persona (obs. 13).
