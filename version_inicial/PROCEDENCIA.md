@@ -1,11 +1,11 @@
-# Procedencia de `actual/`
+# Procedencia de `version_inicial/`
 
-Esta carpeta guarda la versión del paper tal como se envió a ICITS'27 (submission 418), con la plantilla ACM (`acmart`).
-Es la referencia del «antes»: **no se edita**. Todos los cambios se hacen en la raíz del repositorio (`main.tex`, `sections/`, `figures/`, `references.bib`).
+Esta carpeta (antes llamada `actual/`, nombre que confundía porque no es el LaTeX vigente) guarda la **primera versión** del paper tal como se envió a ICITS'27 (submission 418), con la plantilla ACM (`acmart`).
+Es la referencia del «antes» y **no es el LaTeX vigente**: **no se edita**. Todos los cambios se hacen en la raíz del repositorio (`main.tex`, `sections/`, `figures/`, `references.bib`).
 
 ## Origen
 
-- Archivo original: `actual/original/Implementation_of_Intrusion_Prevention_Systems__IPS_.zip`
+- Archivo original: `version_inicial/original/Implementation_of_Intrusion_Prevention_Systems__IPS_.zip`
   - Tamaño: 3 582 223 bytes
   - SHA-256: `b62572ec7659b3efbc011d061de25f1dc4a812815fad648d9d5cc15751a3b147`
   - Fecha del archivo en disco: 2026-11-16 10:55 (hora de Perú)
@@ -26,6 +26,6 @@ Es la referencia del «antes»: **no se edita**. Todos los cambios se hacen en l
 ## Cómo comprobarlo
 
 ```bash
-sha256sum actual/original/*.zip actual/main.tex actual/References.bib actual/main.pdf
-git diff v0-acmart-original -- actual/   # solo debe aparecer este archivo
+sha256sum version_inicial/original/*.zip version_inicial/main.tex version_inicial/References.bib version_inicial/main.pdf
+git diff v0-acmart-original -- version_inicial/   # en la etiqueta v0 la carpeta se llamaba actual/   # solo debe aparecer este archivo
 ```

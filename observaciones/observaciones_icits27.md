@@ -1,3 +1,5 @@
+> **Documento histórico:** matriz inicial de observaciones (antes de los experimentos y de la reescritura). El estado vigente de cada observación está en `observaciones/registro_cambios.md` del repositorio del paper y en `docs/lab/10_seguimiento_revisores.md` del laboratorio.
+
 # ICITS'27 (submission 418): matriz de observaciones y plan de subsanación
 
 **Artículo:** Implementation of an Intrusion Prevention System for Mitigating DoS Attacks in Industrial Control Networks Based on PLC and Industrial Switch Protection
@@ -143,5 +145,5 @@ El plan está ordenado por lo que más riesgo quita al artículo. Los pasos de t
 ## 4. Entregables asociados
 
 - Este archivo: matriz de observaciones (§1), requisitos de hardware (§2) y plan (§3).
-- Versión LNCS del `main.tex` y compilación limpia: pendiente de la tarea de plantilla (Bloque A).
-- Datos crudos y scripts de medición: pendientes de los experimentos (Bloque B).
+- (Histórico) Versión LNCS y compilación limpia: hecha; `main` usa hoy `acmart` y `respaldo-main` conserva `llncs`.
+- (Histórico) Datos crudos y scripts de medición: hechos (130 corridas finales en `laptop-dev`).

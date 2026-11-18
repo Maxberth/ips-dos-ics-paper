@@ -7,7 +7,7 @@ Para ver el cambio exacto de un commit: `git show <hash>`.
 
 | # | Observación (resumida) | Cambio hecho en el paper | Commit | Estado |
 |---|---|---|---|---|
-| 0 | Plantilla ACM, no Springer LNCS | `main.tex` nuevo con `llncs` (`runningheads`), `\institute`, `\email`, `\keywords` con `\and`, bibliografía `splncs04`. Se añadieron `llncs.cls` y `splncs04.bst` al repo. | [`e8ccd5b`](https://github.com/Maxberth/ips-dos-ics-paper/commit/e8ccd5b), [`44942fd`](https://github.com/Maxberth/ips-dos-ics-paper/commit/44942fd) | Resuelta |
+| 0 | Plantilla ACM, no Springer LNCS | Se probó la plantilla `llncs` (rama `respaldo-main`, 12 páginas). `main` vuelve al formato `acmart` de la primera versión con las correcciones de las guías de Springer, a la espera de confirmar con la conferencia qué formato aceptan. | [`e8ccd5b`](https://github.com/Maxberth/ips-dos-ics-paper/commit/e8ccd5b), [`44942fd`](https://github.com/Maxberth/ips-dos-ics-paper/commit/44942fd) | Resuelta |
 | 1 | La regla de Suricata usa `alert`; no demuestra bloqueo | §4.3 con las reglas `drop` reales y la ruta inline (nftables → NFQUEUE → Suricata); la afirmación de bloqueo se respalda con los contadores y la captura (§5.2). | [`0788893`](https://github.com/Maxberth/ips-dos-ics-paper/commit/0788893) | Resuelta |
 | 2 | UDP en la metodología pero no en los resultados | El UDP flood se incluye en el método (§3, §4.4) y en todos los resultados (§5). | [`0788893`](https://github.com/Maxberth/ips-dos-ics-paper/commit/0788893) | Resuelta |
 | 3 | Snort mencionado sin experimento | Snort se quita de la comparación: §3.5 aclara que no se evaluó y §5.6 y §6 lo declaran como trabajo futuro. | [`0788893`](https://github.com/Maxberth/ips-dos-ics-paper/commit/0788893) | Resuelta |

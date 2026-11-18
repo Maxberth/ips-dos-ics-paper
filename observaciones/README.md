@@ -5,7 +5,7 @@
 
 ## Texto original de los revisores
 
-No hay ningún archivo con el texto literal de los revisores, ni en `~/code/articulo` ni en el repositorio del laboratorio. La matriz de arriba resume las observaciones. Si se consigue el correo o PDF de EasyChair con las revisiones, conviene guardarlo tal cual en `observaciones/originales/`.
+El texto literal de los comentarios de los revisores está en el correo de aceptación de la conferencia (no se versiona aquí). La matriz de arriba los resume y numera del 0 al 26.
 
 ## Cómo mantenerlo
 

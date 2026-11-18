@@ -10,6 +10,6 @@ Todas las figuras del paper las genera el laboratorio ([`ips-dos-ics-lab`](https
 | `r1_availability.pdf` | Fig. 4, disponibilidad | `r1_availability` |
 | `r3_availability_timeseries.pdf` | Fig. 5, serie por segundo | `r3_availability_timeseries` |
 
-Las tablas (`tables/t_*.tex`) salen de `lab/analysis/tablas_paper.py`. Las capturas de pantalla y las figuras de la versión inicial (acmart) se retiraron porque sus resultados no se conservan; los originales siguen en `actual/Imagenes/`.
+Las tablas (`tables/t_*.tex`) salen de `lab/analysis/tablas_paper.py`. Las capturas de pantalla y las figuras de la versión inicial (acmart) se retiraron porque sus resultados no se conservan; los originales siguen en `version_inicial/Imagenes/`.
 
 En `main` (formato `acmart`) las figuras son las de `figures/paper_acm/` del laboratorio, generadas con `--layout acm`: ancho de columna (3,3 in) o de página (7 in), siempre con letra de al menos 6 pt. La rama `respaldo-main` usa las de `figures/paper/` (ancho de LNCS, 4,8 in).

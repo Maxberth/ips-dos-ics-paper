@@ -12,25 +12,22 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 - [ ] Entradas `% VERIFICAR DOI` y `% VERIFICAR AUTOR` de `references.bib` resueltas.
 - [x] Extensión dentro del límite de páginas de la conferencia (12 páginas con referencias; el límite de ICITS'27 en inglés es 12).
 
-## Formato LNCS
+## Formato (`main`: acmart, dos columnas, con las correcciones de Springer)
 
-- [x] `\documentclass[runningheads]{llncs}` y bibliografía `splncs04`.
-- [x] `\titlerunning` y `\authorrunning`.
-- [x] Autores con `\and`, afiliación en `\institute` y correos en `\email`.
-- [x] Keywords separadas con `\and` dentro del abstract.
-- [ ] ORCID de los autores con `\orcidID{}`, si la conferencia lo pide.
-- [ ] Ciudad y país de la afiliación confirmados (hoy: «Trujillo, Peru»).
-- [x] Compila sin errores ni referencias indefinidas.
-- [x] Todas las fuentes embebidas en el PDF (`pdffonts main.pdf`).
-- [x] Figuras vectoriales (PDF) generadas por script, legibles al ancho de LNCS y con marcadores distintos por escenario.
-- [ ] Sin `Overfull \hbox` visibles en el PDF (hoy quedan pocos de menos de 10 pt).
+- [x] `\documentclass[sigconf]{acmart}` con bibliografía `ACM-Reference-Format` (la rama `respaldo-main` tiene la versión `llncs` + `splncs04`).
+- [x] Título y autores completos, correos de todos y autor de correspondencia marcado (Alberth Vigo Saldaña).
+- [x] Encabezados con mayúsculas y solo dos niveles numerados; pie de figura debajo y título de tabla encima; ecuaciones numeradas.
+- [x] Figuras vectoriales (PDF) generadas por script, con letra de al menos 6 pt y marcadores distintos por escenario (legibles en blanco y negro).
+- [x] Tablas a tamaño natural, sin escalar, con dos tamaños de letra uniformes.
+- [x] Compila sin errores ni referencias sin resolver (`make`), con las fuentes embebidas (`pdffonts main.pdf`).
+- [x] 12 páginas con referencias (límite de ICITS'27 para inglés: 12).
+- [ ] ORCID de los autores con `\orcid{}`, si la conferencia lo pide.
+- [ ] Confirmar con la organización qué formato aceptan (`acmart` de dos columnas o LNCS/LNNS de Springer).
 
 ## Archivos a subir
 
 - [ ] PDF final generado con `make` (`main.pdf`).
-- [ ] Fuentes en un .zip: `main.tex`, `sections/`, `figures/`, `references.bib`, `llncs.cls`, `splncs04.bst`. Se puede generar con:
-      `git archive --format=zip -o submission/fuentes.zip HEAD main.tex sections figures references.bib llncs.cls splncs04.bst`
-      (sin `actual/`, `observaciones/` ni `submission/`).
+- [x] ZIP de entrega con tres elementos al mismo nivel: carpeta del proyecto LaTeX, PDF del artículo y formulario de licencia (se genera con los pasos de `submission/README_entrega.md`).
 - [ ] Formulario de copyright/consentimiento de Springer firmado (`copyright.docx`). Lo firma el autor de contacto.
 - [ ] Registro de al menos un autor en la conferencia (con el pago hecho por la persona que corresponda, fuera de este repo).
 
@@ -39,5 +36,5 @@ En esta carpeta no se guardan formularios firmados, datos de pago ni credenciale
 - [ ] Etiqueta en Git del estado entregado: `git tag -a v1-camera-ready -m "Versión entregada"` y `git push origin v1-camera-ready`.
 - [ ] Guardar aquí el correo de confirmación de la plataforma, sin datos personales.
 
-- [ ] **Hacer públicos los repositorios `ips-dos-ics-lab` y `ips-dos-ics-paper` antes de subir** (el abstract y la sección de disponibilidad los citan).
+- [x] Repositorios `ips-dos-ics-lab` y `ips-dos-ics-paper` públicos (el resumen y la sección de disponibilidad los citan).
 - [ ] Revisión de inglés por una persona (obs. 13).
